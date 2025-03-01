@@ -5,46 +5,63 @@ import React, { useEffect, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { v4 } from 'uuid';
 
-import { NewContractDto } from '../../model/contract';
+import { Contract, NewContractDto } from '../../model/contract';
 
 import Select from '@/components/inputs/Select';
 import { useUsers } from '@/app/users/services/useUsers';
 import { useCreateContracts } from '../../services/useCreateContract';
 import { useProviders } from '@/app/shared/providers/services/useProviders';
+import { useUpdateContract } from '../../services/useUpdateContract';
+import { toast } from 'sonner';
 type Props = {
   onClose: () => void;
+  contractToEdit?: Contract;
 };
 
-const AddNewContractForm = ({ onClose }: Props) => {
+const mapContractToNewContractDto = (contract: Contract): NewContractDto => ({
+  id: contract.id,
+  name: contract.name,
+  providerId: contract.provider.id,
+  communityContracts: contract.communityContracts,
+  contractsCommunitiesRequests: contract.contractsCommunitiesRequests,
+  dataSources: contract.dataSources,
+  cups: contract.cups,
+  contractType: contract.contractType,
+  createdAt: contract.createdAt,
+  state: contract.state,
+  contractPower: contract.contractPower ?? 0,
+  fullAddress: contract.fullAddress,
+  user: contract.user.id,
+  userVat: contract.userVat,
+});
+
+const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
   const { data: users } = useUsers();
   const { data: providers } = useProviders();
-  const { mutate, isSuccess, error } = useCreateContracts();
 
-  const [formData, setFormData] = useState<NewContractDto>({
-    id: v4(),
-    name: '',
-    providerId: '',
-    communityContracts: [],
-    contractsCommunitiesRequests: [],
-    dataSources: [],
-    cups: '',
-    contractType: 'CONSUMPTION',
-    createdAt: new Date().toISOString(),
-    state: 'Active',
-    contractPower: 0,
-    fullAddress: '',
-    user: '',
-    userVat: '',
-  });
+  const { mutate: createContract } = useCreateContracts({ callback: onClose });
+  const { mutate: updateContract } = useUpdateContract({ callback: onClose });
 
-  useEffect(() => {
-    if (isSuccess) {
-      onClose();
-    }
-    if (error) {
-      console.error('Error creating contract:', error);
-    }
-  }, [isSuccess, error, onClose]);
+  const initialData = contractToEdit
+    ? mapContractToNewContractDto(contractToEdit)
+    : ({
+        id: v4(),
+        name: '',
+        providerId: '',
+        communityContracts: [],
+        contractsCommunitiesRequests: [],
+        dataSources: [],
+        cups: '',
+        contractType: 'CONSUMPTION',
+        createdAt: new Date().toISOString(),
+        state: 'Active',
+        contractPower: 0,
+        fullAddress: '',
+        user: '',
+        userVat: '',
+      } as NewContractDto);
+
+  const [formData, setFormData] = useState<NewContractDto>(initialData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,9 +73,12 @@ const AddNewContractForm = ({ onClose }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
 
-    mutate(formData);
+    if (!contractToEdit) {
+      createContract(formData);
+    } else {
+      updateContract({ contractId: contractToEdit.id, contractData: formData });
+    }
   };
 
   return (
@@ -90,7 +110,7 @@ const AddNewContractForm = ({ onClose }: Props) => {
           />
         </div>
         <div className="flex flex-col gap-4">
-          <Label htmlFor="provider">Contracted Power</Label>
+          <Label htmlFor="provider">Contracted Power (KW's)</Label>
           <Input
             type="number"
             name="contractPower"
@@ -133,15 +153,6 @@ const AddNewContractForm = ({ onClose }: Props) => {
           />
         </div>
         <div className="flex flex-col gap-4">
-          <Label htmlFor="user">User Vat*</Label>
-          <Input
-            type="text"
-            name="userVat"
-            value={formData.userVat}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex flex-col gap-4">
           <Label htmlFor="user">User</Label>
           <Select
             onChange={(value) =>
@@ -158,8 +169,23 @@ const AddNewContractForm = ({ onClose }: Props) => {
             value={formData.user}
           />
         </div>
+        <div className="flex flex-col gap-4">
+          <Label htmlFor="user">User Vat*</Label>
+          <Input
+            type="text"
+            name="userVat"
+            value={formData.userVat}
+            onChange={handleChange}
+          />
+        </div>
 
-        <Button type="submit">Add Contract</Button>
+        {!contractToEdit && <Button type="submit">Add Contract</Button>}
+        {contractToEdit && (
+          <div className="flex gap-4 justify-end w-full">
+            <Button variant="outline">Cancel</Button>
+            <Button type="submit">Update</Button>
+          </div>
+        )}
       </div>
     </form>
   );

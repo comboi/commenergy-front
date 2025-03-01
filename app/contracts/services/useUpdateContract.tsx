@@ -1,25 +1,31 @@
 import { useMutation } from '@tanstack/react-query';
 import apiClient from '@/lib/api-client';
-import { Contract, NewContractDto } from '../model/contract';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 
-const postContract = async (newContract: NewContractDto): Promise<Contract> => {
-  console.log(newContract);
-  const { data } = await apiClient.post('/contracts', newContract);
-  return data;
+const updateContract = async (
+  contractId: string,
+  contractData: any
+): Promise<void> => {
+  await apiClient.patch(`/contracts/${contractId}`, contractData);
 };
 
 type Props = {
   callback?: () => void;
 };
 
-export function useCreateContracts({ callback }: Props) {
-  const { data, error, isSuccess, isError, ...rest } = useMutation({
+export function useUpdateContract({ callback }: Props) {
+  const { data, error, isError, isSuccess, ...rest } = useMutation({
     mutationKey: ['contracts'],
-    mutationFn: (newContract: NewContractDto) => postContract(newContract),
+    mutationFn: ({
+      contractId,
+      contractData,
+    }: {
+      contractId: string;
+      contractData: any;
+    }) => updateContract(contractId, contractData),
     onError: (error) => {
-      console.error('Error creating contract:', error);
+      console.error('Error updating contract:', error);
     },
   });
 
@@ -33,7 +39,7 @@ export function useCreateContracts({ callback }: Props) {
   }, [error, isSuccess, isError]);
 
   return {
-    data: data ?? [],
+    data,
     error,
     ...rest,
   };

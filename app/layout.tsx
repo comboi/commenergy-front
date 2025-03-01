@@ -27,6 +27,7 @@ export default function RootLayout({
                 <div className="flex w-full h-screen">
                   <Sidebar />
                   <main className="flex-1 overflow-y-auto p-8">{children}</main>
+                  <Toaster />
                 </div>
               </SidebarProvider>
             </AuthProvider>
@@ -39,3 +40,4 @@ export default function RootLayout({
 
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/toaster';
