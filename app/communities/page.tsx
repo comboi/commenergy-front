@@ -1,4 +1,4 @@
-import { CommunitiesTable } from '@/app/communities/components/communities-table';
+import { CommunitiesTable } from '@/app/communities/components/communities-table/communities-table';
 
 export default function CommunitiesPage() {
   return (

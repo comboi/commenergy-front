@@ -59,7 +59,7 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
         fullAddress: '',
         user: '',
         userVat: '',
-      } as NewContractDto);
+      } as unknown as NewContractDto);
 
   const [formData, setFormData] = useState<NewContractDto>(initialData);
 

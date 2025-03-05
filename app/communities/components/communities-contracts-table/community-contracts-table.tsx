@@ -35,7 +35,7 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CommunityContract } from '@/app/communities/model/communityContract';
-import { useCommunityContracts } from '@/app/communities/services/useCommunityContracts';
+import { useCommunityContracts } from '@/app/communities/services/communityContracts/useCommunityContracts';
 import UserTooltip from '@/app/users/components/user-tooltip';
 import AddNewContractModal from './add-new-contract-modal';
 import AddNewContract from './add-new-contract-modal';
@@ -85,7 +85,7 @@ export const columns: ColumnDef<CommunityContract>[] = [
   {
     accessorKey: 'communityShare',
     header: 'Community Share',
-    cell: ({ row, table }) => {
+    cell: ({ row }) => {
       const communityShare = row.getValue('communityShare') as number;
       const [isEditing, setIsEditing] = React.useState(false);
       const [isHovered, setIsHovered] = React.useState(false);
@@ -256,7 +256,7 @@ export function CommunityContractsTable({
               Add contract
               <PlusCircle />
             </Button>
-            <Button onClick={() => isSharingOpen(true)}>
+            <Button onClick={() => setIsSharingOpen(true)}>
               Sharings
               <PlusCircle />
             </Button>
@@ -269,7 +269,7 @@ export function CommunityContractsTable({
             </Modal> */}
             <Modal
               isOpen={isSharingOpen}
-              onClose={() => isSharingOpen(false)}
+              onClose={() => setIsSharingOpen(false)}
               title="Export sharings"
               description="">
               <AddNewContract />

@@ -1,9 +1,8 @@
 import { components } from '../../../lib/api-schema.d';
 
-export type CommunitySchema = components['schemas']['Community'];
+export type CommunitySchema = components['schemas']['CommunityEnriched'];
 
 export type CommunityStatus = CommunitySchema['status'];
-export type EnergySourceType = CommunitySchema['energySourceType'];
 
 export type Community = {
   id: string;
@@ -11,8 +10,8 @@ export type Community = {
   status: CommunityStatus;
   contracts: number;
   power: string;
-  type: EnergySourceType;
   address: string;
+  capacity: CommunitySchema['capacity'];
 };
 
 export const mapCommunitySchemaToCommunity = (
@@ -23,6 +22,18 @@ export const mapCommunitySchemaToCommunity = (
   status: community.status,
   contracts: community.communityContracts.length,
   power: String(community.power),
-  type: community.energySourceType,
-  address: '',
+  address: community.address ?? '',
+  capacity: community.capacity,
+});
+
+export type NewCommunityDto = Partial<CommunitySchema>;
+
+export const mapCommunityToDto = (community: Community): NewCommunityDto => ({
+  id: community.id,
+  name: community.name,
+  status: community.status,
+  communityContracts: [],
+  power: Number(community.power),
+  address: community.address,
+  capacity: community.capacity,
 });

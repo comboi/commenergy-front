@@ -191,10 +191,10 @@ export interface paths {
         get: operations["ContractsController_getContract"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["ContractsController_deleteContract"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["ContractsController_updateContract"];
         trace?: never;
     };
     "/contracts/{id}/terms-agreements": {
@@ -423,6 +423,11 @@ export interface components {
             createdAt: string;
             /** @example Contract Name */
             name: string;
+            /**
+             * @example SOLAR
+             * @enum {string}
+             */
+            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO";
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             providerId: string;
             /** @example ES1234567890123456 */
@@ -613,6 +618,11 @@ export interface components {
             user: string;
             /** @example [] */
             communityContracts: string[];
+            /**
+             * @example SOLAR
+             * @enum {string}
+             */
+            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO";
             /** @example [] */
             contractsCommunitiesRequests: string[];
             /** @example [] */
@@ -627,6 +637,11 @@ export interface components {
             createdAt: string;
             /** @example Contract Name */
             name: string;
+            /**
+             * @example SOLAR
+             * @enum {string}
+             */
+            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO";
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             providerId: string;
             /** @example ES1234567890123456 */
@@ -683,6 +698,11 @@ export interface components {
             id: string;
             /** @example CEL CommEnergy */
             name: string;
+            /**
+             * Format: string
+             * @example Calle de la Ciencia, 1, 28040 Madrid
+             */
+            address: Record<string, never>;
             /** @example Commenergy is a placeholder community description */
             description: string;
             /** @example 100 */
@@ -694,11 +714,6 @@ export interface components {
             status: "PENDING_TO_BE_CONSTITUTED" | "CONSTITUTED" | "ACTIVE" | "INACTIVE";
             /** @example ES123123123123123123FF123 */
             locationCode: string;
-            /** @example [
-             *       "c6cd7b7a-f7a2-4e38-8e06-27649a84c727",
-             *       "c12d7b7a-f7a2-4e38-8e06-27649a84c727"
-             *     ] */
-            energySourceType: string[];
         };
         Community: {
             /**
@@ -709,19 +724,16 @@ export interface components {
             /** @example CEL CommEnergy */
             name: string;
             /** @example Commenergy is a placeholder community description */
-            description: Record<string, never>;
+            description: string;
             /**
              * @description Power in kW
              * @example 100
              */
-            power: Record<string, never>;
+            power: number;
+            /** @example Calle de la Ciencia, 1, 28040 Madrid, España */
+            address: string;
             /** @example 2023-03-23T10:00:00.000Z */
             createdAt: string;
-            /**
-             * @example SOLAR
-             * @enum {string}
-             */
-            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO";
             /**
              * @example ACTIVE
              * @enum {string}
@@ -735,7 +747,11 @@ export interface components {
              *       }
              *     ] */
             users: string[];
-            /** @example ES123123123123123123123123 */
+            /**
+             * Format: string
+             * @description Location code
+             * @example ES123123123123123123123123
+             */
             locationCode: Record<string, never>;
             /**
              * @description Array of legal document ids
@@ -754,6 +770,84 @@ export interface components {
              */
             communityContracts: string[];
         };
+        CommunityCapacity: {
+            /**
+             * @description Total used capacity in kW
+             * @example 100
+             */
+            totalUsed: number;
+            /**
+             * @description Total capacity in kW
+             * @example 200
+             */
+            totalCapacity: number;
+            /**
+             * @description Total used capacity percentage
+             * @example 0.5
+             */
+            totalUsedPercentage: number;
+        };
+        CommunityEnriched: {
+            /**
+             * Format: uuid
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            id: string;
+            /** @example CEL CommEnergy */
+            name: string;
+            /** @example Commenergy is a placeholder community description */
+            description: string;
+            /**
+             * @description Power in kW
+             * @example 100
+             */
+            power: number;
+            /** @example Calle de la Ciencia, 1, 28040 Madrid, España */
+            address: string;
+            /** @example 2023-03-23T10:00:00.000Z */
+            createdAt: string;
+            /**
+             * @example ACTIVE
+             * @enum {string}
+             */
+            status: "PENDING_TO_BE_CONSTITUTED" | "CONSTITUTED" | "ACTIVE" | "INACTIVE";
+            /** @example [
+             *       {
+             *         "userId": "c6cd7b7a-f7a2-4e38-8e06-27649a84c727",
+             *         "communityId": "c6cd7b7a-f7a2-4e38-8e06-27649a84c727",
+             *         "role": "admin"
+             *       }
+             *     ] */
+            users: string[];
+            /**
+             * Format: string
+             * @description Location code
+             * @example ES123123123123123123123123
+             */
+            locationCode: Record<string, never>;
+            /**
+             * @description Array of legal document ids
+             * @example [
+             *       "c6cd7b7a-f7a2-4e38-8e06-27649a84c727",
+             *       "c12d7b7a-f7a2-4e38-8e06-27649a84c727"
+             *     ]
+             */
+            legalDocuments: string[];
+            /**
+             * @description Array of community contract ids
+             * @example [
+             *       "c6cd7b7a-f7a2-4e38-8e06-27649a84c727",
+             *       "c12d7b7a-f7a2-4e38-8e06-27649a84c727"
+             *     ]
+             */
+            communityContracts: string[];
+            /** @example {
+             *       "totalUsed": 100,
+             *       "totalCapacity": 200,
+             *       "totalUsedPercentage": 0.5
+             *     } */
+            capacity: components["schemas"]["CommunityCapacity"];
+        };
         UpdateCommunityDto: {
             /**
              * Format: uuid
@@ -762,6 +856,11 @@ export interface components {
             id: string;
             /** @example CEL CommEnergy */
             name: string;
+            /**
+             * Format: string
+             * @example Calle de la Ciencia, 1, 28040 Madrid
+             */
+            address: Record<string, never>;
             /** @example Commenergy is a placeholder community description */
             description: string;
             /** @example 100 */
@@ -782,6 +881,11 @@ export interface components {
             id?: string;
             /** @example CEL CommEnergy */
             name?: string;
+            /**
+             * Format: string
+             * @example Calle de la Ciencia, 1, 28040 Madrid
+             */
+            address?: Record<string, never>;
             /** @example Commenergy is a placeholder community description */
             description?: string;
             /** @example 100 */
@@ -1196,6 +1300,52 @@ export interface operations {
             };
         };
     };
+    ContractsController_deleteContract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The contract has been successfully deleted. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractsController_updateContract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContractDto"];
+            };
+        };
+        responses: {
+            /** @description Update contract */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractEnriched"];
+                };
+            };
+        };
+    };
     ContractsController_acceptTermsCommunityTermsAgreement: {
         parameters: {
             query?: never;
@@ -1236,7 +1386,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Community"][];
+                    "application/json": components["schemas"]["CommunityEnriched"][];
                 };
             };
         };
@@ -1259,7 +1409,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Community"];
+                    "application/json": components["schemas"]["CommunityEnriched"];
                 };
             };
         };
@@ -1303,7 +1453,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Community"];
+                    "application/json": components["schemas"]["CommunityEnriched"];
                 };
             };
         };
@@ -1347,7 +1497,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Community"];
+                    "application/json": components["schemas"]["CommunityEnriched"];
                 };
             };
         };

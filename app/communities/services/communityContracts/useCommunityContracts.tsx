@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import apiClient from '@/lib/api-client';
 
-import { CommunityContract } from '../model/communityContract';
+import { CommunityContract } from '../../model/communityContract';
 
 const fetchCommunityContracts = async (
   communityId: string
