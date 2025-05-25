@@ -12,11 +12,12 @@ import { Button } from '../ui/button';
 type Props = {
   title: string;
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (x?: any) => void;
   children?: React.ReactNode;
   description: string;
   primaryButton?: React.ReactNode;
   secondaryButton?: React.ReactNode;
+  className?: string;
 };
 
 const Modal = ({
@@ -27,12 +28,13 @@ const Modal = ({
   children,
   primaryButton = null,
   secondaryButton,
+  className = '',
 }: Props) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogPortal>
         <DialogOverlay />
-        <DialogContent>
+        <DialogContent className={className}>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
           {children}

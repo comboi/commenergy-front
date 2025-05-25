@@ -94,7 +94,7 @@ export function CommunitiesTable() {
       cell: ({ row }) => (
         <div
           className={
-            row.getValue('status') === 'Active'
+            row.original.status.toLowerCase() === 'active'
               ? 'text-green-600'
               : 'text-red-600'
           }>

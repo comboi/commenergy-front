@@ -36,6 +36,134 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sharing-versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SharingVersionsController_createVersion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharing-versions/bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SharingVersionsController_createVersionBulk"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharing-versions/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SharingVersionsController_getVersionsByCommunityId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharing-versions/{sharingVersionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["SharingVersionsController_deleteSharingVersion"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharing-versions/{sharingVersionId}/set-production": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SharingVersionsController_updateSharingVersion"];
+        trace?: never;
+    };
+    "/sharings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SharingsController_createCommunityContract"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharings/{communityContractId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SharingsController_getSharingsById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharings/{sharingId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SharingsController_updateSharing"];
+        trace?: never;
+    };
     "/documents/{id}": {
         parameters: {
             query?: never;
@@ -339,11 +467,6 @@ export interface components {
             /** @example 2023-01-01 */
             communityJoinDate?: Record<string, never> | null;
             /**
-             * @description Community share percentage
-             * @example 0.15
-             */
-            communityShare?: Record<string, never> | null;
-            /**
              * @description Community fee amount
              * @example 50
              */
@@ -352,6 +475,8 @@ export interface components {
             communityFeePeriodType?: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
             /** @example I agree to the terms and conditions */
             termsAgreement: string;
+            /** @example I agree to the terms and conditions */
+            sharingIds: string[];
         };
         CommunityContract: {
             /**
@@ -372,11 +497,6 @@ export interface components {
             /** @example 2023-03-23T10:00:00.000Z */
             communityJoinDate: string | null;
             /**
-             * @description Community share percentage
-             * @example 50
-             */
-            communityShare: number | null;
-            /**
              * @description Community fee amount
              * @example 100
              */
@@ -388,6 +508,8 @@ export interface components {
             communityFeePeriodType: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
             /** @example Terms and conditions agreement text */
             termsAgreement: string | null;
+            /** @example Shares of the contract with the community and different versions */
+            sharingIds: unknown[] | null;
         };
         UserResponse: {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
@@ -425,9 +547,9 @@ export interface components {
             name: string;
             /**
              * @example SOLAR
-             * @enum {string}
+             * @enum {string|null}
              */
-            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO";
+            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO" | null;
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             providerId: string;
             /** @example ES1234567890123456 */
@@ -467,6 +589,52 @@ export interface components {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             provider: components["schemas"]["EnergyProvider"];
         };
+        SharingVersion: {
+            /** @example 01956d02-39dd-731b-91e6-c502a7f31e47 */
+            id: string;
+            /** @example v1.0 */
+            name: string;
+            /** @example true */
+            isProductionVersion: boolean;
+            /**
+             * Format: date-time
+             * @example 2023-01-01T00:00:00Z
+             */
+            createdDate: string;
+            /**
+             * Format: date-time
+             * @example 2023-01-02T00:00:00Z
+             */
+            updatedDate: string;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            communityId: string;
+        };
+        SharingEnriched: {
+            /** @example 01956d02-39dd-731b-91e6-c502a7f31e47 */
+            id: string;
+            /** @example 50 */
+            share: number;
+            /** @example v1.0 */
+            versionId: string;
+            /** @example cc123456 */
+            communityContractId: string;
+            /**
+             * Format: date-time
+             * @example 2023-01-01T00:00:00Z
+             */
+            createdDate: string;
+            /**
+             * Format: date-time
+             * @example 2023-01-02T00:00:00Z
+             */
+            updatedDate: string;
+            /** @example {
+             *       "totalUsed": 100,
+             *       "totalCapacity": 200,
+             *       "totalUsedPercentage": 0.5
+             *     } */
+            version: components["schemas"]["SharingVersion"];
+        };
         CommunityContractEnriched: {
             /**
              * Format: uuid
@@ -503,11 +671,6 @@ export interface components {
             /** @example 2023-03-23T10:00:00.000Z */
             communityJoinDate: string | null;
             /**
-             * @description Community share percentage
-             * @example 50
-             */
-            communityShare: number | null;
-            /**
              * @description Community fee amount
              * @example 100
              */
@@ -519,6 +682,69 @@ export interface components {
             communityFeePeriodType: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
             /** @example Terms and conditions agreement text */
             termsAgreement: string | null;
+            /** @example Share ids of the contract with the community and different versions */
+            sharingIds: unknown[] | null;
+            /** @example Shares of the contract with the community and different versions */
+            sharing: components["schemas"]["SharingEnriched"] | null;
+        };
+        SharingVersionDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            id: string;
+            /** @example V.1.0 */
+            name: string;
+            /** @example true */
+            isProductionVersion: boolean;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            communityId: string;
+        };
+        SharingDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            id: string;
+            /** @example 50 */
+            share: number;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            versionId: string;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            communityContractId: string;
+        };
+        CreateSharingVersionDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            id: string;
+            /** @example V.1.0 */
+            name: string;
+            /** @example true */
+            isProductionVersion: boolean;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            communityId: string;
+            /** @example [
+             *       {
+             *         "communityContractId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
+             *         "share": 0.5,
+             *         "versionId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
+             *         "id": "550e8400-e29b-41d4-a716-446655440000"
+             *       }
+             *     ] */
+            sharings: components["schemas"]["SharingDto"][];
+        };
+        Sharing: {
+            /** @example 01956d02-39dd-731b-91e6-c502a7f31e47 */
+            id: string;
+            /** @example 50 */
+            share: number;
+            /** @example v1.0 */
+            versionId: string;
+            /** @example cc123456 */
+            communityContractId: string;
+            /**
+             * Format: date-time
+             * @example 2023-01-01T00:00:00Z
+             */
+            createdDate: string;
+            /**
+             * Format: date-time
+             * @example 2023-01-02T00:00:00Z
+             */
+            updatedDate: string;
         };
         Document: {
             /** @example document.pdf */
@@ -639,9 +865,9 @@ export interface components {
             name: string;
             /**
              * @example SOLAR
-             * @enum {string}
+             * @enum {string|null}
              */
-            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO";
+            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO" | null;
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             providerId: string;
             /** @example ES1234567890123456 */
@@ -1014,6 +1240,180 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    SharingVersionsController_createVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SharingVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SharingVersion"];
+                };
+            };
+        };
+    };
+    SharingVersionsController_createVersionBulk: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSharingVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SharingVersion"];
+                };
+            };
+        };
+    };
+    SharingVersionsController_getVersionsByCommunityId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown[];
+                };
+            };
+        };
+    };
+    SharingVersionsController_deleteSharingVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sharingVersionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SharingVersionsController_updateSharingVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sharingVersionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SharingsController_createCommunityContract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SharingDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Sharing"];
+                };
+            };
+        };
+    };
+    SharingsController_getSharingsById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Sharing"];
+                };
+            };
+        };
+    };
+    SharingsController_updateSharing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sharingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SharingDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Sharing"];
+                };
             };
         };
     };

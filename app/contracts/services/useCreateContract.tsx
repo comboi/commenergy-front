@@ -11,11 +11,11 @@ const postContract = async (newContract: NewContractDto): Promise<Contract> => {
 };
 
 type Props = {
-  callback?: () => void;
+  callback?: (contractId: string) => void;
 };
 
 export function useCreateContracts({ callback }: Props) {
-  const { data, error, isSuccess, isError, ...rest } = useMutation({
+  const { data, error, isSuccess, isError, ...rest } = useMutation<Contract>({
     mutationKey: ['contracts'],
     mutationFn: (newContract: NewContractDto) => postContract(newContract),
     onError: (error) => {
@@ -25,8 +25,8 @@ export function useCreateContracts({ callback }: Props) {
 
   useEffect(() => {
     if (isSuccess) {
-      toast.error('Contract created successfully');
-      callback?.();
+      toast.success('Contract created successfully');
+      callback?.(data.id);
     } else if (isError) {
       toast.error('Error creating contract');
     }

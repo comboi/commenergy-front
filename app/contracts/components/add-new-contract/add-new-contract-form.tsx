@@ -12,9 +12,9 @@ import { useUsers } from '@/app/users/services/useUsers';
 import { useCreateContracts } from '../../services/useCreateContract';
 import { useProviders } from '@/app/shared/providers/services/useProviders';
 import { useUpdateContract } from '../../services/useUpdateContract';
-import { toast } from 'sonner';
+
 type Props = {
-  onClose: () => void;
+  onClose: (contractId: string) => void;
   contractToEdit?: Contract;
 };
 
@@ -33,6 +33,7 @@ const mapContractToNewContractDto = (contract: Contract): NewContractDto => ({
   fullAddress: contract.fullAddress,
   user: contract.user.id,
   userVat: contract.userVat,
+  energySourceType: contract.energySourceType,
 });
 
 const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {

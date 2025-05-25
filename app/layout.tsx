@@ -26,7 +26,9 @@ export default function RootLayout({
               <SidebarProvider>
                 <div className="flex w-full h-screen">
                   <Sidebar />
-                  <main className="flex-1 overflow-y-auto p-8">{children}</main>
+                  <main className="flex-1 overflow-y-auto p-8 relative max-h-100vh">
+                    {children}
+                  </main>
                   <Toaster />
                 </div>
               </SidebarProvider>

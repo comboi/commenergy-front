@@ -22,7 +22,6 @@ export function useCommunities() {
 }
 
 export function useCommunityById(id: string) {
-  console.log('useCommunityById', id);
   return useQuery({
     queryKey: ['community', id],
     queryFn: () => fetchCommunityById(id),

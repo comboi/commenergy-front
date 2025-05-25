@@ -120,7 +120,7 @@ export function ContractsTable() {
         cell: ({ row }) => (
           <div
             className={
-              row.original.state === 'Active'
+              row.original.state.toLowerCase() == 'active'
                 ? 'text-green-600'
                 : 'text-red-600'
             }>
@@ -233,7 +233,7 @@ export function ContractsTable() {
             <Modal
               isOpen={isModalDetailOpen}
               onClose={handleOnCloseModal}
-              title="Add New Contract"
+              title={activeContract ? 'Edit contract' : 'Add new contract'}
               description="Fill out the form below to add a new contract">
               <AddNewContractForm
                 onClose={handleOnCloseModal}
