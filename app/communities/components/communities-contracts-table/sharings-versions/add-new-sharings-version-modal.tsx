@@ -6,7 +6,7 @@ import InputField from '@/components/inputs/InputField';
 import { DialogFooter } from '@/components/ui/dialog';
 
 import { Checkbox } from '@/components/ui/checkbox';
-import { useCreateSharingVersionBulk } from '@/app/sharings/services/useSharingVersions';
+import { useCreateSharingVersion } from '@/app/sharings/services/useSharingVersions';
 import { CommunityContract } from '@/app/communities/model/communityContract';
 
 type Props = {
@@ -20,19 +20,21 @@ const AddNewSharingsVersionModal = ({
   communityId,
   sharings,
 }: Props) => {
-  const { mutate: createSharingVersion } = useCreateSharingVersionBulk({
+  const { mutate: createSharingVersion } = useCreateSharingVersion({
     callback: (id) => onClose(id),
   });
 
   const [name, setName] = useState('');
-  const [isProductionVersion, setIsProductionVersion] = useState(false);
+  const [isProductionVersion, setIsProductionVersion] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const versionId = v4();
     const filteredSharings = sharings.filter(
       (sharing) => sharing?.communityContractId
     );
+
     await createSharingVersion({
       id: versionId,
       name,
@@ -76,4 +78,4 @@ const AddNewSharingsVersionModal = ({
   );
 };
 
-export default AddNewSharingsVersionModal;
+export { AddNewSharingsVersionModal };

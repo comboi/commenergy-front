@@ -25,7 +25,7 @@ const mapContractToNewContractDto = (contract: Contract): NewContractDto => ({
   communityContracts: contract.communityContracts,
   contractsCommunitiesRequests: contract.contractsCommunitiesRequests,
   dataSources: contract.dataSources,
-  cups: contract.cups,
+  contractCode: contract.contractCode,
   contractType: contract.contractType,
   createdAt: contract.createdAt,
   state: contract.state,
@@ -52,7 +52,7 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
         communityContracts: [],
         contractsCommunitiesRequests: [],
         dataSources: [],
-        cups: '',
+        contractCode: '',
         contractType: 'CONSUMPTION',
         createdAt: new Date().toISOString(),
         state: 'Active',
@@ -120,11 +120,11 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
         <div className="flex flex-col gap-4">
-          <Label htmlFor="cups">CUPS*</Label>
+          <Label htmlFor="contractCode">Contract Code*</Label>
           <Input
             type="text"
-            name="cups"
-            value={formData.cups}
+            name="contractCode"
+            value={formData.contractCode}
             onChange={handleChange}
           />
         </div>

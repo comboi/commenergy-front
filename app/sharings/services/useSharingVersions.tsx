@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/api-client';
 import {
-  NewSharingVersionBulkDto,
-  NewSharingVersionDto,
+  CreateSharingVersionDto,
   SharingVersion,
+  UpdateSharingVersionDto,
 } from '../model/sharingVersion';
 
 const fetchSharingVersions = async (
@@ -26,10 +26,16 @@ type Props = {
   callback?: (id: string) => void;
 };
 
-export const useCreateSharingVersion = ({ callback }: Props) => {
+export const updateSharingVersion = ({ callback }: Props) => {
   return useMutation({
-    mutationFn: async (data: NewSharingVersionDto) => {
-      const response = await apiClient.post(`/sharing-versions`, data);
+    mutationFn: async (
+      data: UpdateSharingVersionDto & { versionId: string }
+    ) => {
+      const { versionId, ...sharingVersion } = data;
+      const response = await apiClient.patch(
+        `/sharing-versions/${data.versionId}`,
+        sharingVersion
+      );
       return response.data;
     },
     onSuccess: (data) => {
@@ -38,10 +44,10 @@ export const useCreateSharingVersion = ({ callback }: Props) => {
   });
 };
 
-export const useCreateSharingVersionBulk = ({ callback }: Props) => {
+export const useCreateSharingVersion = ({ callback }: Props) => {
   return useMutation({
-    mutationFn: async (data: NewSharingVersionBulkDto) => {
-      const response = await apiClient.post(`/sharing-versions/bulk`, data);
+    mutationFn: async (data: CreateSharingVersionDto) => {
+      const response = await apiClient.post(`/sharing-versions`, data);
       return response.data;
     },
     onSuccess: (data) => {

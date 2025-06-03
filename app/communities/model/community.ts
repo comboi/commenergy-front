@@ -9,7 +9,6 @@ export type Community = {
   name: string;
   status: CommunityStatus;
   contracts: number;
-  power: string;
   address: string;
   capacity: CommunitySchema['capacity'];
 };
@@ -21,7 +20,6 @@ export const mapCommunitySchemaToCommunity = (
   name: community.name,
   status: community.status,
   contracts: community.communityContracts.length,
-  power: String(community.power),
   address: community.address ?? '',
   capacity: community.capacity,
 });
@@ -33,7 +31,6 @@ export const mapCommunityToDto = (community: Community): NewCommunityDto => ({
   name: community.name,
   status: community.status,
   communityContracts: [],
-  power: Number(community.power),
   address: community.address,
   capacity: community.capacity,
 });

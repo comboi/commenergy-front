@@ -55,7 +55,7 @@ export function CommunitiesTable() {
     activeElement,
     setActiveElement,
   } = useTableModals<Community>();
-  const { data = [], refetch } = useCommunities();
+  const { data = [], refetch, isLoading } = useCommunities();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -85,7 +85,9 @@ export function CommunitiesTable() {
       accessorKey: 'name',
       header: 'Name',
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('name')}</div>
+        <Link href={`/communities/${row.original.id}`}>
+          <div className="capitalize">{row.getValue('name')}</div>
+        </Link>
       ),
     },
     {
@@ -237,8 +239,11 @@ export function CommunitiesTable() {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
+          <TableBody
+            columnsNumber={columns.length}
+            isLoading={isLoading}
+            noItems={!isLoading && table.getRowModel().rows?.length === 0}>
+            {table.getRowModel().rows?.length &&
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -252,16 +257,7 @@ export function CommunitiesTable() {
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
+              ))}
           </TableBody>
         </Table>
       </div>

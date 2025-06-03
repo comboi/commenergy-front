@@ -1,9 +1,10 @@
 import { CommunityContract } from '@/app/communities/model/communityContract';
 import { NewSharingDto } from '@/app/sharings/model/sharing';
-import { useUpdateSharing } from '@/app/sharings/services/useSharings';
+
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { getSharingDifference } from '../utils/get-sharing-difference';
+import { updateSharingVersion } from '@/app/sharings/services/useSharingVersions';
 
 const useCommunityContractsSharings = (
   data: CommunityContract[],
@@ -12,7 +13,7 @@ const useCommunityContractsSharings = (
 ) => {
   const [isUpdatingSharings, setIsUpdatingSharings] = useState(false);
 
-  const { mutate: updateSharing } = useUpdateSharing({});
+  const { mutate: updateSharing } = updateSharingVersion({});
 
   const handleUpdateSharings = async () => {
     const sharingsToUpdate: NewSharingDto[] = data
@@ -29,11 +30,10 @@ const useCommunityContractsSharings = (
 
     setIsUpdatingSharings(true);
     try {
-      await Promise.all([
-        ...sharingsToUpdate.map(async (sharing) => {
-          return updateSharing(sharing);
-        }),
-      ]);
+      await updateSharing({
+        versionId: sharingsToUpdate[0]!.versionId,
+        sharings: sharingsToUpdate,
+      });
 
       toast.success('Sharings updated successfully');
       callback();

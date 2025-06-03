@@ -40,7 +40,7 @@ import DeleteContractForm from './add-new-contract/delete-contract-form';
 import TooltipEllipsisText from '@/components/ui/TooltipElipsis';
 
 export function ContractsTable() {
-  const { data, refetch } = useContracts();
+  const { data, refetch, isLoading } = useContracts();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -67,9 +67,9 @@ export function ContractsTable() {
   const columns: ColumnDef<Contract>[] = React.useMemo(
     () => [
       {
-        accessorKey: 'cups',
-        header: 'CUPS',
-        cell: ({ row }) => <div>{row.getValue('cups')}</div>,
+        accessorKey: 'contractCode',
+        header: 'Code (CUPS/CAU)',
+        cell: ({ row }) => <div>{row.getValue('contractCode')}</div>,
       },
       {
         accessorKey: 'name',
@@ -275,8 +275,11 @@ export function ContractsTable() {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
+          <TableBody
+            columnsNumber={columns.length}
+            isLoading={isLoading}
+            noItems={!isLoading && table.getRowModel().rows?.length === 0}>
+            {table.getRowModel().rows?.length &&
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -290,16 +293,7 @@ export function ContractsTable() {
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
+              ))}
           </TableBody>
         </Table>
       </div>

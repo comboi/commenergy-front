@@ -147,7 +147,7 @@ const SharingsModal = ({ communityId, onClose }: Props) => {
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody columnsNumber={columns.length}>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
@@ -178,4 +178,4 @@ const SharingsModal = ({ communityId, onClose }: Props) => {
   );
 };
 
-export default SharingsModal;
+export { SharingsModal };

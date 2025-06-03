@@ -11,12 +11,14 @@ export const getSharingDifference = (
 
   const actualShare = newContract.sharing?.share;
 
-  const dirtyDifference =
-    hasShare && actualShare
-      ? parseFloat(
-          ((actualShare - Number(originalContractShare ?? 0)) * 100).toFixed(2)
-        )
-      : 0;
+  const dirtyDifference = hasShare
+    ? parseFloat(
+        (
+          (Number(actualShare ?? 0) - Number(originalContractShare ?? 0)) *
+          100
+        ).toFixed(2)
+      )
+    : 0;
 
   return dirtyDifference;
 };

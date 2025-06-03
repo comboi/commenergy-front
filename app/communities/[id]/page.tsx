@@ -23,12 +23,11 @@ export default function CommunityDetailsPage({
   if (!communityData) return <div>Community not found</div>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative pt-8 min-h-[100vh]">
       <Link href="/communities" className="flex items-center gap-2">
         <ArrowLeft className="w-4 h-4" />
         Back to communities
       </Link>
-
       <CommunityDetails community={communityData} onUpdate={refetch} />
       <CommunityContractsTable
         communityId={communityData.id}

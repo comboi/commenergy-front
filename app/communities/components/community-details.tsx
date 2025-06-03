@@ -14,7 +14,7 @@ type Props = {
 
 export function CommunityDetails({ community, onUpdate }: Props) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { status, contracts, power, address, capacity } = community;
+  const { status, contracts, address, capacity } = community;
 
   const handleUpdateEditModal = () => {
     setIsEditModalOpen(false);
@@ -59,7 +59,9 @@ export function CommunityDetails({ community, onUpdate }: Props) {
             <CardTitle className="text-sm font-medium">Power</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{power} kws</div>
+            <div className="text-2xl font-bold">
+              {capacity.totalGenerationPower} kws
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -74,14 +76,14 @@ export function CommunityDetails({ community, onUpdate }: Props) {
             </div>
           </CardContent>
         </Card>
-        <Card className="md:col-span-2 lg:col-span-4">
+        {/* <Card className="md:col-span-2 lg:col-span-4">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Address</CardTitle>
           </CardHeader>
           <CardContent>
             <div>{address}</div>
           </CardContent>
-        </Card>
+        </Card> */}
         <Modal
           isOpen={isEditModalOpen}
           onClose={handleUpdateEditModal}

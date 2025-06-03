@@ -2,7 +2,8 @@ import { components } from '@/lib/api-schema.d';
 
 export type SharingVersion = components['schemas']['SharingVersion'];
 
-export type NewSharingVersionDto = components['schemas']['SharingVersionDto'];
-
-export type NewSharingVersionBulkDto =
+export type CreateSharingVersionDto =
   components['schemas']['CreateSharingVersionDto'];
+
+export type UpdateSharingVersionDto =
+  components['schemas']['UpdateSharingVersionDto'];

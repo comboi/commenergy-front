@@ -91,13 +91,7 @@ const AddNewCommunityForm = ({ communityToEdit, onClose }: Props) => {
           value={formData.description}
           onChange={handleChange}
         />
-        <InputField
-          label="Power (in KW's)"
-          name="power"
-          type="number"
-          value={formData.power}
-          onChange={handleChange}
-        />
+
         <Select
           label="Status"
           onChange={(value) =>

@@ -19,7 +19,7 @@ import {
 import { useAuth } from '@/contexts/auth-context';
 
 const sidebarItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
+  // { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
   // { icon: Users, label: 'Users', href: '/users' },
   { icon: FileText, label: 'Contracts', href: '/contracts' },
   { icon: Home, label: 'Communities', href: '/communities' },

@@ -37,13 +37,13 @@ const DeleteCommunityContractForm = ({ communityContract, onClose }: Props) => {
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
-            <TableHead>CUPS</TableHead>
+            <TableHead>Contract Code</TableHead>
             <TableHead>Address</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableCell>{communityContract.contract.name}</TableCell>
-          <TableCell>{communityContract.contract.cups}</TableCell>
+          <TableCell>{communityContract.contract.contractCode}</TableCell>
           <TableCell>{communityContract.contract.fullAddress}</TableCell>
         </TableBody>
       </Table>

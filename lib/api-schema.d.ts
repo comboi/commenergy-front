@@ -45,22 +45,6 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["SharingVersionsController_createVersion"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/sharing-versions/bulk": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
         post: operations["SharingVersionsController_createVersionBulk"];
         delete?: never;
         options?: never;
@@ -97,7 +81,7 @@ export interface paths {
         delete: operations["SharingVersionsController_deleteSharingVersion"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["SharingVersionsController_updateSharingVersion"];
         trace?: never;
     };
     "/sharing-versions/{sharingVersionId}/set-production": {
@@ -113,7 +97,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["SharingVersionsController_updateSharingVersion"];
+        patch: operations["SharingVersionsController_setSharingVersionProduction"];
         trace?: never;
     };
     "/sharings": {
@@ -323,22 +307,6 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["ContractsController_updateContract"];
-        trace?: never;
-    };
-    "/contracts/{id}/terms-agreements": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["ContractsController_acceptTermsCommunityTermsAgreement"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/communities": {
@@ -553,7 +521,7 @@ export interface components {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             providerId: string;
             /** @example ES1234567890123456 */
-            cups: string;
+            contractCode: string;
             /**
              * @example CONSUMPTION
              * @enum {string}
@@ -646,7 +614,7 @@ export interface components {
              *       "createdAt": "2023-10-01T00:00:00.000Z",
              *       "name": "Contract Name",
              *       "provider": "Provider Name",
-             *       "cups": "ES1234567890123456",
+             *       "contractCode": "ES1234567890123456",
              *       "contractType": "CONSUMPTION",
              *       "contractPower": 100,
              *       "state": "Active",
@@ -687,16 +655,6 @@ export interface components {
             /** @example Shares of the contract with the community and different versions */
             sharing: components["schemas"]["SharingEnriched"] | null;
         };
-        SharingVersionDto: {
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            id: string;
-            /** @example V.1.0 */
-            name: string;
-            /** @example true */
-            isProductionVersion: boolean;
-            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
-            communityId: string;
-        };
         SharingDto: {
             /** @example 550e8400-e29b-41d4-a716-446655440000 */
             id: string;
@@ -716,6 +674,17 @@ export interface components {
             isProductionVersion: boolean;
             /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
             communityId: string;
+            /** @example [
+             *       {
+             *         "communityContractId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
+             *         "share": 0.5,
+             *         "versionId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
+             *         "id": "550e8400-e29b-41d4-a716-446655440000"
+             *       }
+             *     ] */
+            sharings: components["schemas"]["SharingDto"][];
+        };
+        UpdateSharingVersionDto: {
             /** @example [
              *       {
              *         "communityContractId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
@@ -822,7 +791,7 @@ export interface components {
             /** @example 550e8400-e29b-41d4-a716-446655440000 */
             providerId: string;
             /** @example ES0021000000000000AA */
-            cups: string;
+            contractCode: string;
             /**
              * @example CONSUMPTION
              * @enum {string}
@@ -871,7 +840,7 @@ export interface components {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             providerId: string;
             /** @example ES1234567890123456 */
-            cups: string;
+            contractCode: string;
             /**
              * @example CONSUMPTION
              * @enum {string}
@@ -902,19 +871,6 @@ export interface components {
             dataSources: string[];
             /** @example 73400963Z */
             userVat: string;
-        };
-        TermsAgreement: {
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            id: string;
-            /** @example 2023-10-01T12:00:00Z */
-            acceptanceDate: string;
-            /** @example ES12345678A */
-            userVat: string;
-            /** @example [
-             *       "doc1",
-             *       "doc2"
-             *     ] */
-            documents: string[];
         };
         CreateCommunityDto: {
             /**
@@ -951,11 +907,6 @@ export interface components {
             name: string;
             /** @example Commenergy is a placeholder community description */
             description: string;
-            /**
-             * @description Power in kW
-             * @example 100
-             */
-            power: number;
             /** @example Calle de la Ciencia, 1, 28040 Madrid, España */
             address: string;
             /** @example 2023-03-23T10:00:00.000Z */
@@ -998,6 +949,11 @@ export interface components {
         };
         CommunityCapacity: {
             /**
+             * @description Total generation power in kW
+             * @example 100
+             */
+            totalGenerationPower: number;
+            /**
              * @description Total used capacity in kW
              * @example 100
              */
@@ -1023,11 +979,6 @@ export interface components {
             name: string;
             /** @example Commenergy is a placeholder community description */
             description: string;
-            /**
-             * @description Power in kW
-             * @example 100
-             */
-            power: number;
             /** @example Calle de la Ciencia, 1, 28040 Madrid, España */
             address: string;
             /** @example 2023-03-23T10:00:00.000Z */
@@ -1068,6 +1019,7 @@ export interface components {
              */
             communityContracts: string[];
             /** @example {
+             *       "totalGenerationPower": 100,
              *       "totalUsed": 100,
              *       "totalCapacity": 200,
              *       "totalUsedPercentage": 0.5
@@ -1211,7 +1163,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommunityContractDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -1240,29 +1196,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    SharingVersionsController_createVersion: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SharingVersionDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SharingVersion"];
-                };
             };
         };
     };
@@ -1330,6 +1263,29 @@ export interface operations {
         };
     };
     SharingVersionsController_updateSharingVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sharingVersionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSharingVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SharingVersionsController_setSharingVersionProduction: {
         parameters: {
             query?: never;
             header?: never;
@@ -1742,32 +1698,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ContractEnriched"];
-                };
-            };
-        };
-    };
-    ContractsController_acceptTermsCommunityTermsAgreement: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TermsAgreementDto"];
-            };
-        };
-        responses: {
-            /** @description Terms and agreements have been successfully accepted. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TermsAgreement"];
                 };
             };
         };

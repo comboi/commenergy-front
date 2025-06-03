@@ -165,7 +165,6 @@ const AddNewCommunityContractModal = ({
             options={mapOptionsToCommunitySelect}
             value={formData.contractId}
           />
-
           <InputField
             label="Community Fee (€)"
             name="communityFee"
@@ -185,14 +184,13 @@ const AddNewCommunityContractModal = ({
             options={feePeriodOptions}
             value={formData.communityFeePeriodType}
           />
-          {/* 
-        To implement with file uploader
-        <InputField
-          label="Terms Agreement"
-          name="termsAgreement"
-          value={formData.termsAgreement}
-          onChange={handleChange}
-        /> */}
+
+          <InputField
+            label="Terms Agreement"
+            name="termsAgreement"
+            value={''}
+            onChange={handleChange}
+          />
           <DialogFooter>
             <Button variant="outline" onClick={onClose}>
               Cancel
