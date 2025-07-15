@@ -72,7 +72,7 @@ export function AddDocumentModal({
   }, [onClose]);
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="max-w-2xl"
         onPointerDownOutside={handleCancel}

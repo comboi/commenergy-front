@@ -6,8 +6,10 @@ import {
   useUploadCommunityContractDocument,
 } from '@/app/communities/services/communityContracts/useCommunityContractDocuments';
 import { useDeleteDocument } from '@/app/communities/services/documents/useDeleteDocuments';
+import { useCreateTermsAgreement } from '@/app/communities/services/termsAgreements/useCreateTermsAgreement';
+import { useTermsAgreementsByCommunityContract } from '@/app/communities/services/termsAgreements/useTermsAgreements';
+import { useAuth } from '@/contexts/auth-context';
 import { v4 } from 'uuid';
-import { Badge } from '@/components/ui/badge';
 import { Button, ButtonWithTooltip } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import {
@@ -19,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { formatDate } from '../file-utils/export-file-utils';
+import { formatDate } from '../../file-utils/export-file-utils';
 import { EllipsisVertical, LoaderCircle, Download } from 'lucide-react';
 import {
   DropdownMenu,
@@ -42,12 +44,16 @@ const CommunityContractDocumentsForm = ({
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { user } = useAuth();
+
   const { data: communityModelDocuments = [] } = useCommunityModelDocuments(
     communityContract.communityId
   );
-
   const { data: communityContractDocuments = [], refetch } =
     useCommunityContractDocuments(communityContract.id);
+
+  const { data: existingTermsAgreement } =
+    useTermsAgreementsByCommunityContract(communityContract.id);
 
   const { mutate: uploadDocument, isPending: isUploading } =
     useUploadCommunityContractDocument({
@@ -62,6 +68,13 @@ const CommunityContractDocumentsForm = ({
       refetch();
     },
   });
+
+  const { mutate: createTermsAgreement, isPending: isCreatingTermsAgreement } =
+    useCreateTermsAgreement({
+      callback: () => {
+        onClose();
+      },
+    });
 
   const handleDownload = (fileUrl: string) => {
     window.open(fileUrl, '_blank');
@@ -82,7 +95,7 @@ const CommunityContractDocumentsForm = ({
         file,
       });
     }
-    // Reset the input
+
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -97,9 +110,27 @@ const CommunityContractDocumentsForm = ({
     deleteDocument(documentId);
   };
 
+  const handleCreateTermsAgreement = () => {
+    if (!user) return;
+
+    const uploadedDocumentIds = communityContractDocuments.map((doc) => doc.id);
+
+    createTermsAgreement({
+      id: v4(),
+      documents: uploadedDocumentIds,
+      acceptanceDate: new Date().toISOString(),
+      userId: user.id,
+      communityContractId: communityContract.id,
+      userVat: user.vat,
+    });
+  };
+
+  const hasExistingTermsAgreement = !!existingTermsAgreement;
+  const hasMissingDocuments =
+    communityContractDocuments.length < communityModelDocuments.length;
+
   return (
     <div className="relative">
-      {/* Hidden file input */}
       <input
         type="file"
         ref={fileInputRef}
@@ -107,7 +138,6 @@ const CommunityContractDocumentsForm = ({
         style={{ display: 'none' }}
         accept=".pdf,.doc,.docx,.txt"
       />
-
       <Table className="mb-8">
         <TableHeader>
           <TableRow>
@@ -218,10 +248,29 @@ const CommunityContractDocumentsForm = ({
           </Button>
           <ButtonWithTooltip
             variant="default"
-            onClick={onClose}
-            disabled
-            tooltip="Missing documents">
-            Submit docs
+            onClick={handleCreateTermsAgreement}
+            disabled={
+              hasMissingDocuments ||
+              hasExistingTermsAgreement ||
+              isCreatingTermsAgreement
+            }
+            tooltip={
+              hasExistingTermsAgreement
+                ? 'Terms agreement already exists for this contract'
+                : hasMissingDocuments
+                ? 'Missing documents'
+                : ''
+            }>
+            {isCreatingTermsAgreement ? (
+              <>
+                <LoaderCircle className="h-4 w-4 animate-spin mr-2" />
+                Submitting...
+              </>
+            ) : hasExistingTermsAgreement ? (
+              'Terms agreement exists'
+            ) : (
+              'Submit docs'
+            )}
           </ButtonWithTooltip>
         </div>
       </DialogFooter>

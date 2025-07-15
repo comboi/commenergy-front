@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/select';
 import { Community } from '@/app/communities/model/community';
 import {
-  useUpdateUsersToCommunities,
+  useCreateCommunityUser,
   useUserCommunities,
 } from '@/app/communities/services/communities/useCommunityUsers';
 import { CommunityUser } from '@/app/communities/model/communityUser';
@@ -41,7 +41,7 @@ interface NewUserDraft {
 
 export function CommunityUsersForm({ community, onClose, isOpen }: Props) {
   const { data: communityUsers, refetch } = useUserCommunities(community.id);
-  const { mutate: updateUsers, isPending } = useUpdateUsersToCommunities(
+  const { mutate: createUser, isPending } = useCreateCommunityUser(
     community.id
   );
 
@@ -99,26 +99,19 @@ export function CommunityUsersForm({ community, onClose, isOpen }: Props) {
 
     const newCommunityUser = {
       userId: newUser.foundUser?.id || v4(),
-      communityId: community.id,
       role: newUser.role,
       vat: newUser.vat,
       ...(newUser.name && { name: newUser.name }),
       ...(newUser.email && { email: newUser.email }),
       ...(newUser.mobile && { mobile: newUser.mobile }),
-    } as CommunityUser;
+    } as Omit<CommunityUser, 'communityId'>;
 
-    // Combine existing users with new user
-    const allUsers = [...(communityUsers || []), newCommunityUser];
-
-    updateUsers(
-      { users: allUsers },
-      {
-        onSuccess: () => {
-          onClose();
-          refetch();
-        },
-      }
-    );
+    createUser(newCommunityUser, {
+      onSuccess: () => {
+        onClose();
+        refetch();
+      },
+    });
   };
 
   const hasValidUser = newUser && newUser.vat && newUser.role;

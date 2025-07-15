@@ -1,10 +1,10 @@
-import { EditIcon, FileCheck, FileX, Paperclip, TrashIcon } from 'lucide-react';
+import { EditIcon, FileCheck, FileX, TrashIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CommunityContract } from '@/app/communities/model/communityContract';
 import { memo, useCallback } from 'react';
 
 type ActionsCellProps = {
-  areDocumentsReady: boolean;
+  hasTermsAgreement: boolean;
   communityContract: CommunityContract;
   isDisabled: boolean;
   onEdit: (communityContract: CommunityContract) => void;
@@ -14,7 +14,7 @@ type ActionsCellProps = {
 
 export const ActionsCell = memo<ActionsCellProps>(
   ({
-    areDocumentsReady,
+    hasTermsAgreement,
     communityContract,
     onEdit,
     onDelete,
@@ -33,6 +33,14 @@ export const ActionsCell = memo<ActionsCellProps>(
       handleOpenDocuments(communityContract);
     }, [handleOpenDocuments, communityContract]);
 
+    const getDocumentIcon = () => {
+      return hasTermsAgreement ? (
+        <FileCheck />
+      ) : (
+        <FileX className="text-gray-500" />
+      );
+    };
+
     return (
       <div className="flex justify-end">
         {isDisabled ? (
@@ -40,7 +48,7 @@ export const ActionsCell = memo<ActionsCellProps>(
         ) : (
           <>
             <Button size="icon" variant="ghost" onClick={handleDocuments}>
-              {areDocumentsReady ? <FileCheck /> : <FileX />}
+              {getDocumentIcon()}
             </Button>
             <Button size="icon" variant="ghost" onClick={handleEdit}>
               <EditIcon />

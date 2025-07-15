@@ -13,14 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import {
-  ChevronDown,
-  EditIcon,
-  EyeIcon,
-  TrashIcon,
-  UsersIcon,
-  FileText,
-} from 'lucide-react';
+import { ChevronDown, EditIcon, EyeIcon, TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
@@ -45,10 +38,8 @@ import useTableModals from '@/hooks/use-table-modals';
 import Modal from '@/components/modal/modal';
 import AddNewCommunityForm from './modals/add-new-community-form';
 import DeleteCommunityForm from './modals/delete-community-form';
-import { CommunityUsersForm } from '../community-users/community-users-form';
-import CommunityDocumentsForm from '../community-documents/community-documents-form/community-documents-form';
+
 import { useAuth } from '@/contexts/auth-context';
-import { CommunityAdminProvider } from '../../contexts/community-admin-context';
 
 export function CommunitiesTable() {
   const {
@@ -58,8 +49,6 @@ export function CommunitiesTable() {
     setIsEditModalOpen,
     activeElement,
     setActiveElement,
-    isShareCommunityModalOpen,
-    setIsShareCommunityModalOpen,
   } = useTableModals<Community>();
   const { data = [], refetch, isLoading } = useCommunities();
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -70,7 +59,7 @@ export function CommunitiesTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [isDocumentsModalOpen, setIsDocumentsModalOpen] = React.useState(false);
+
   const [selectedCommunityForDocuments, setSelectedCommunityForDocuments] =
     React.useState<Community | null>(null);
 
@@ -86,21 +75,10 @@ export function CommunitiesTable() {
   const handleOnCloseModal = () => {
     setIsEditModalOpen(false);
     setIsDeleteModalOpen(false);
-    setIsShareCommunityModalOpen(false);
-    setIsDocumentsModalOpen(false);
+
     setActiveElement(null);
     setSelectedCommunityForDocuments(null);
     refetch();
-  };
-
-  const handleOpenShareCommunityModal = (community: Community) => {
-    setIsShareCommunityModalOpen(true);
-    setActiveElement(community);
-  };
-
-  const handleOpenDocumentsModal = (community: Community) => {
-    setIsDocumentsModalOpen(true);
-    setSelectedCommunityForDocuments(community);
   };
 
   const getIsLoggedUserCommunityAdmin = (community: Community) => {
@@ -204,12 +182,6 @@ export function CommunitiesTable() {
                 <Button
                   size="icon"
                   variant="ghost"
-                  onClick={() => handleOpenDocumentsModal(community)}>
-                  <FileText />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
                   onClick={() => handleClickOpenEditModal(community)}>
                   <EditIcon />
                 </Button>
@@ -218,13 +190,6 @@ export function CommunitiesTable() {
                   variant="ghost"
                   onClick={() => handleOpenDeleteEditModal(community)}>
                   <TrashIcon />
-                </Button>
-
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => handleOpenShareCommunityModal(community)}>
-                  <UsersIcon />
                 </Button>
               </>
             ) : (
@@ -379,36 +344,6 @@ export function CommunitiesTable() {
           onClose={handleOnCloseModal}
           communityToEdit={activeElement ?? undefined}
         />
-      </Modal>
-      <Modal
-        isOpen={isShareCommunityModalOpen}
-        onClose={() => setIsShareCommunityModalOpen(false)}
-        title="Community Users"
-        description="Add or remove users from the community">
-        {activeElement && (
-          <CommunityAdminProvider community={activeElement}>
-            <CommunityUsersForm
-              isOpen={isShareCommunityModalOpen}
-              onClose={handleOnCloseModal}
-              community={activeElement}
-            />
-          </CommunityAdminProvider>
-        )}
-      </Modal>
-      <Modal
-        className="max-w-[800px]"
-        isOpen={isDocumentsModalOpen}
-        onClose={handleOnCloseModal}
-        title="Community Documents"
-        description="Manage community model documents that serve as templates for contracts">
-        {selectedCommunityForDocuments && (
-          <CommunityAdminProvider community={selectedCommunityForDocuments}>
-            <CommunityDocumentsForm
-              onClose={handleOnCloseModal}
-              community={selectedCommunityForDocuments}
-            />
-          </CommunityAdminProvider>
-        )}
       </Modal>
       <Modal
         isOpen={isDeleteModalOpen}

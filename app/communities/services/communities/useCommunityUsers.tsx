@@ -2,8 +2,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/api-client';
 
 import {
-  BulkUpdateCommunityUsersDto,
   CommunityUser,
+  CreateNewUserCommunityDto,
 } from '../../model/communityUser';
 
 const getCommunityUser = async (
@@ -23,24 +23,71 @@ export function useUserCommunities(communityId: string) {
   });
 }
 
-const updateCommunityUsers = async (
+const updateCommunityUser = async (
   communityId: string,
-  payload: BulkUpdateCommunityUsersDto
-): Promise<CommunityUser[]> => {
+  userId: string,
+  user: Partial<Omit<CommunityUser, 'communityId' | 'userId'>>
+): Promise<CommunityUser> => {
   const { data } = await apiClient.put(
-    `/communities/${communityId}/users`,
-    payload
+    `/communities/${communityId}/users/${userId}`,
+    user
   );
   return data;
 };
 
-export function useUpdateUsersToCommunities(communityId: string) {
-  return useMutation<CommunityUser[], Error, BulkUpdateCommunityUsersDto>({
-    mutationKey: ['communityUsers', communityId],
-    mutationFn: (users: BulkUpdateCommunityUsersDto) =>
-      updateCommunityUsers(communityId, users),
+export function useUpdateCommunityUser(communityId: string) {
+  return useMutation<
+    CommunityUser,
+    Error,
+    {
+      userId: string;
+      user: Partial<Omit<CommunityUser, 'communityId' | 'userId'>>;
+    }
+  >({
+    mutationKey: ['updateCommunityUser', communityId],
+    mutationFn: ({ userId, user }) =>
+      updateCommunityUser(communityId, userId, user),
     onError: (error) => {
-      console.error('Error updating Community:', error);
+      console.error('Error updating community user:', error);
+    },
+  });
+}
+
+const createCommunityUser = async (
+  communityId: string,
+  user: CreateNewUserCommunityDto
+): Promise<CommunityUser> => {
+  const { data } = await apiClient.post(
+    `/communities/${communityId}/users`,
+    user
+  );
+  return data;
+};
+
+export function useCreateCommunityUser(communityId: string) {
+  return useMutation<CommunityUser, Error, CreateNewUserCommunityDto>({
+    mutationKey: ['createCommunityUser', communityId],
+    mutationFn: (user: CreateNewUserCommunityDto) =>
+      createCommunityUser(communityId, user),
+    onError: (error) => {
+      console.error('Error creating community user:', error);
+    },
+  });
+}
+
+const deleteCommunityUser = async (
+  communityId: string,
+  userId: string
+): Promise<void> => {
+  await apiClient.delete(`/communities/${communityId}/users/${userId}`);
+};
+
+export function useDeleteCommunityUser(communityId: string) {
+  return useMutation<void, Error, string>({
+    mutationKey: ['deleteCommunityUser', communityId],
+    mutationFn: (userId: string) => deleteCommunityUser(communityId, userId),
+    onError: (error) => {
+      console.error('Error deleting community user:', error);
     },
   });
 }

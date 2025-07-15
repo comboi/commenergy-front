@@ -19,7 +19,7 @@ import { AddNewSharingsVersionModal } from '../sharings-versions/add-new-sharing
 import { ActionsDropdown } from './actions-dropdown';
 import { CommunityContractsSearch } from '../components/community-contracts-search';
 import { ContractTypeToggle } from '../components/contract-type-toggle';
-import CommunityContractDocumentsForm from '../modals/community-contract-documents-form';
+import CommunityContractDocumentsForm from '../modals/community-contract-documents/community-contract-documents-form';
 
 type CommunityContractsTableHeaderProps = {
   isLoggedUserAdmin: boolean;

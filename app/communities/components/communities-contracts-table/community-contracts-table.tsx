@@ -217,16 +217,19 @@ const CommunityContractsTableContent = ({
       {
         header: () => <div className="text-right w-full">Actions</div>,
         id: 'actions',
-        cell: ({ row }) => (
-          <ActionsCell
-            handleOpenDocuments={handleClickOpenDocuments}
-            areDocumentsReady={false}
-            isDisabled={!isLoggedUserAdmin}
-            communityContract={row.original}
-            onEdit={handleClickOpenEditModal}
-            onDelete={handleClickOpenDeleteModal}
-          />
-        ),
+        cell: ({ row }) => {
+          const contract = row.original;
+          return (
+            <ActionsCell
+              handleOpenDocuments={handleClickOpenDocuments}
+              hasTermsAgreement={!!contract.termsAgreement}
+              isDisabled={!isLoggedUserAdmin}
+              communityContract={contract}
+              onEdit={handleClickOpenEditModal}
+              onDelete={handleClickOpenDeleteModal}
+            />
+          );
+        },
       },
     ],
     [

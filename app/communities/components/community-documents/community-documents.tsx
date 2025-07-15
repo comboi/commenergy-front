@@ -30,9 +30,13 @@ export function CommunityDocuments({
   community,
   refreshCommunityDetails,
 }: CommunityDocumentsProps) {
-  const [activeTab, setActiveTab] = useState<'model' | 'community'>('model');
+  const [activeTab, setActiveTab] = useState<'model' | 'community'>(
+    'community'
+  );
   const [isAddDocumentDialogOpen, setIsAddDocumentDialogOpen] = useState(false);
-  const [documentToDelete, setDocumentToDelete] = useState<Document | null>(null);
+  const [documentToDelete, setDocumentToDelete] = useState<Document | null>(
+    null
+  );
   const { isLoggedUserAdmin } = useCommunityAdmin();
 
   const {
@@ -160,11 +164,11 @@ export function CommunityDocuments({
         value={activeTab}
         onValueChange={(value) => setActiveTab(value as 'model' | 'community')}>
         <TabsList className={TAB_LIST_CLASSES}>
-          <TabsTrigger value="model" className={TAB_TRIGGER_CLASSES}>
-            Model Documents
-          </TabsTrigger>
           <TabsTrigger value="community" className={TAB_TRIGGER_CLASSES}>
             Community Documents
+          </TabsTrigger>
+          <TabsTrigger value="model" className={TAB_TRIGGER_CLASSES}>
+            Model contract documents
           </TabsTrigger>
         </TabsList>
 

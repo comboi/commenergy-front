@@ -36,6 +36,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/community-contracts/community/{communityId}/contract/{communityContractId}/terms-agreement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommunityContractsController_getTermsAgreementByCommunityContractId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/community-contracts/{communityContractId}/documents/{documentId}": {
         parameters: {
             query?: never;
@@ -304,6 +320,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/terms-agreements/community-contract/{communityContractId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TermsAgreementsController_getTermsAgreementByCommunityContractId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -480,22 +512,6 @@ export interface paths {
         patch: operations["CommunitiesController_patchCommunity"];
         trace?: never;
     };
-    "/communities/{id}/users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CommunitiesController_getCommunityUsers"];
-        put: operations["CommunitiesController_updateUsers"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/communities/{id}/user-request": {
         parameters: {
             query?: never;
@@ -560,7 +576,7 @@ export interface paths {
         patch: operations["CommunitiesRequestsController_AcceptRequestContractToCommunity"];
         trace?: never;
     };
-    "/communities/{id}/documents/{documentId}": {
+    "/communities/{communityId}/documents/{documentId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -574,11 +590,7 @@ export interface paths {
          * @description Uploads a single file and associates it with a specific community and document ID
          */
         post: operations["CommunitiesDocumentsController_addDocumentToCommunity"];
-        /**
-         * Delete a community document
-         * @description Deletes a specific document from a community
-         */
-        delete: operations["CommunitiesDocumentsController_deleteCommunityDocument"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -599,6 +611,74 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/communities/{id}/documents/{documentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete a community document
+         * @description Deletes a specific document from a community
+         */
+        delete: operations["CommunitiesDocumentsController_deleteCommunityDocument"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/communities/{id}/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get community users
+         * @description Retrieves all users associated with a specific community
+         */
+        get: operations["CommunitiesUsersController_getCommunityUsers"];
+        put?: never;
+        /**
+         * Add new user to community
+         * @description Creates and adds a new user to a specific community
+         */
+        post: operations["CommunitiesUsersController_createNewUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/communities/{id}/users/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update community user role
+         * @description Updates the role of a specific user in a community
+         */
+        put: operations["CommunitiesUsersController_updateUser"];
+        post?: never;
+        /**
+         * Remove user from community
+         * @description Removes a specific user from a community
+         */
+        delete: operations["CommunitiesUsersController_deleteUserFromCommunity"];
         options?: never;
         head?: never;
         patch?: never;
@@ -640,8 +720,6 @@ export interface components {
             communityFee?: Record<string, never> | null;
             /** @enum {string|null} */
             communityFeePeriodType?: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
-            /** @example I agree to the terms and conditions */
-            termsAgreement: string;
             /** @example I agree to the terms and conditions */
             sharingIds: string[];
         };
@@ -854,6 +932,22 @@ export interface components {
             /** @example Shares of the contract with the community and different versions */
             sharing: components["schemas"]["SharingEnriched"] | null;
         };
+        TermsAgreementDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            id: string;
+            /** @example [
+             *       "550e8400-e29b-41d4-a716-446655440000"
+             *     ] */
+            documents: string[];
+            /** @example 2012-07-14T01:00:00+01:00 */
+            acceptanceDate: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            userId: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            communityContractId: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            userVat: string;
+        };
         Document: {
             /** @example document.pdf */
             name: string;
@@ -981,20 +1075,6 @@ export interface components {
             role?: "owner" | "partner" | "viewer";
             /** @example read,write,share */
             permissions?: string;
-        };
-        TermsAgreementDto: {
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            id: string;
-            /** @example [
-             *       "550e8400-e29b-41d4-a716-446655440000"
-             *     ] */
-            documents: string[];
-            /** @example 2012-07-14T01:00:00+01:00 */
-            acceptanceDate: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            userId: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            userVat: string;
         };
         CreateUserDto: {
             /**
@@ -1380,13 +1460,7 @@ export interface components {
             /** @example ES123123123123123123FF123 */
             locationCode?: string;
         };
-        UpdateCommunityUserDto: {
-            /**
-             * Format: uuid
-             * @description User ID
-             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
-             */
-            userId: string;
+        UpdateCommunityUserRoleDto: {
             /**
              * @description User role in the community
              * @example user
@@ -1394,9 +1468,25 @@ export interface components {
              */
             role: "admin" | "user" | "partner";
         };
-        BulkUpdateCommunityUsersDto: {
-            /** @description Array of user updates */
-            users: components["schemas"]["UpdateCommunityUserDto"][];
+        CreateNewUserCommunityDto: {
+            /**
+             * Format: uuid
+             * @description User ID
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            userId?: string;
+            /**
+             * @description User role in the community
+             * @default user
+             * @example user
+             * @enum {string}
+             */
+            role: "admin" | "user" | "partner";
+            /**
+             * @description User VAT number
+             * @example ES12345678A
+             */
+            vat: string;
         };
     };
     responses: never;
@@ -1514,6 +1604,35 @@ export interface operations {
         requestBody?: never;
         responses: {
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunityContractsController_getTermsAgreementByCommunityContractId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved the terms agreement for the community contract */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermsAgreementDto"];
+                };
+            };
+            /** @description Terms agreement not found for the community contract */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -2072,6 +2191,35 @@ export interface operations {
             };
         };
     };
+    TermsAgreementsController_getTermsAgreementByCommunityContractId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved the terms agreement by community contract ID. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermsAgreementDto"];
+                };
+            };
+            /** @description Terms agreement not found for the community contract. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     HealthController_run: {
         parameters: {
             query?: never;
@@ -2464,52 +2612,6 @@ export interface operations {
             };
         };
     };
-    CommunitiesController_getCommunityUsers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CommunityUser"][];
-                };
-            };
-        };
-    };
-    CommunitiesController_updateUsers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BulkUpdateCommunityUsersDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CommunityUser"][];
-                };
-            };
-        };
-    };
     CommunitiesRequestsController_getUserRequests: {
         parameters: {
             query?: never;
@@ -2628,15 +2730,14 @@ export interface operations {
     };
     CommunitiesDocumentsController_addDocumentToCommunity: {
         parameters: {
-            query: {
-                type: string;
-            };
+            query?: never;
             header?: never;
             path: {
-                /** @description Community ID */
-                id: string;
+                communityId: string;
                 /** @description Document ID to assign to the uploaded file */
                 documentId: string;
+                /** @description Community ID */
+                id: unknown;
             };
             cookie?: never;
         };
@@ -2676,6 +2777,50 @@ export interface operations {
                 content?: never;
             };
             /** @description Error uploading the document */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunitiesDocumentsController_getCommunityDocuments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Community ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved community documents */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"][];
+                };
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Community not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error retrieving community documents */
             500: {
                 headers: {
                     [name: string]: unknown;
@@ -2728,7 +2873,7 @@ export interface operations {
             };
         };
     };
-    CommunitiesDocumentsController_getCommunityDocuments: {
+    CommunitiesUsersController_getCommunityUsers: {
         parameters: {
             query?: never;
             header?: never;
@@ -2740,13 +2885,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved community documents */
+            /** @description Successfully retrieved community users */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Document"][];
+                    "application/json": components["schemas"]["CommunityUser"][];
                 };
             };
             /** @description Unauthorized - Invalid or missing JWT token */
@@ -2756,15 +2901,101 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Community not found */
-            404: {
+        };
+    };
+    CommunitiesUsersController_createNewUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Community ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNewUserCommunityDto"];
+            };
+        };
+        responses: {
+            /** @description User successfully created and added to community */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityUser"];
+                };
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            /** @description Error retrieving community documents */
-            500: {
+        };
+    };
+    CommunitiesUsersController_updateUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Community ID */
+                id: string;
+                /** @description User ID to update */
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCommunityUserRoleDto"];
+            };
+        };
+        responses: {
+            /** @description User role successfully updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityUser"];
+                };
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunitiesUsersController_deleteUserFromCommunity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Community ID */
+                id: string;
+                /** @description User ID to remove */
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User successfully removed from community */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };

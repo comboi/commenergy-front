@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { TrashIcon, PlusIcon, EditIcon, SaveIcon, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -23,10 +23,10 @@ import { Badge } from '@/components/ui/badge';
 import { Community } from '@/app/communities/model/community';
 import {
   useUserCommunities,
-  useUpdateUsersToCommunities,
+  useUpdateCommunityUser,
+  useDeleteCommunityUser,
 } from '@/app/communities/services/communities/useCommunityUsers';
 import { CommunityUser } from '@/app/communities/model/communityUser';
-import { useCommunityAdmin } from '@/app/communities/contexts/community-admin-context';
 import Modal from '@/components/modal/modal';
 import { CommunityUsersForm } from './community-users-form';
 import { DeleteUserModal } from './delete-user-modal';
@@ -42,7 +42,6 @@ export function CommunityUsersTable({
   isLoggedUserAdmin,
   refreshCommunityDetails,
 }: Props) {
-  const { isUserAdmin } = useCommunityAdmin();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [editingRole, setEditingRole] = useState<'admin' | 'user' | 'partner'>(
@@ -57,9 +56,14 @@ export function CommunityUsersTable({
     refetch,
   } = useUserCommunities(community.id);
 
-  const { mutate: updateUsers, isPending } = useUpdateUsersToCommunities(
+  const { mutate: updateUser, isPending } = useUpdateCommunityUser(
     community.id
   );
+  const { mutate: deleteUser, isPending: isDeleting } = useDeleteCommunityUser(
+    community.id
+  );
+
+  const isMutating = isPending || isDeleting;
 
   const handleCloseModal = () => {
     setIsEditModalOpen(false);
@@ -91,13 +95,11 @@ export function CommunityUsersTable({
   const handleSaveEdit = (user: CommunityUser) => {
     if (!editingRole) return;
 
-    const updatedUser: CommunityUser = {
-      ...user,
-      role: editingRole,
-    };
-
-    updateUsers(
-      { users: [updatedUser] },
+    updateUser(
+      {
+        userId: user.userId,
+        user: { role: editingRole },
+      },
       {
         onSuccess: () => {
           setEditingUserId(null);
@@ -115,23 +117,16 @@ export function CommunityUsersTable({
   };
 
   const handleConfirmDelete = () => {
-    if (!userToDelete || !communityUsers) return;
+    if (!userToDelete) return;
 
-    const remainingUsers = communityUsers.filter(
-      (user) => user.userId !== userToDelete.userId
-    );
-
-    updateUsers(
-      { users: remainingUsers },
-      {
-        onSuccess: () => {
-          setIsDeleteModalOpen(false);
-          setUserToDelete(null);
-          refetch();
-          refreshCommunityDetails?.();
-        },
-      }
-    );
+    deleteUser(userToDelete.userId, {
+      onSuccess: () => {
+        setIsDeleteModalOpen(false);
+        setUserToDelete(null);
+        refetch();
+        refreshCommunityDetails?.();
+      },
+    });
   };
 
   const handleCancelDelete = () => {
@@ -228,7 +223,7 @@ export function CommunityUsersTable({
                           size="sm"
                           variant="ghost"
                           onClick={() => handleSaveEdit(user)}
-                          disabled={isPending}
+                          disabled={isMutating}
                           className="h-8 w-8 p-0">
                           <SaveIcon className="h-4 w-4" />
                         </Button>
@@ -246,7 +241,7 @@ export function CommunityUsersTable({
                           size="sm"
                           variant="ghost"
                           onClick={() => handleStartEdit(user)}
-                          disabled={isUserAdmin(user.userId) || isPending}
+                          disabled={isMutating}
                           className="h-8 w-8 p-0">
                           <EditIcon className="h-4 w-4" />
                         </Button>
@@ -254,7 +249,7 @@ export function CommunityUsersTable({
                           size="sm"
                           variant="ghost"
                           onClick={() => handleRemoveUser(user)}
-                          disabled={isUserAdmin(user.userId) || isPending}
+                          disabled={isMutating}
                           className="h-8 w-8 p-0">
                           <TrashIcon className="h-4 w-4" />
                         </Button>
@@ -285,7 +280,7 @@ export function CommunityUsersTable({
         isOpen={isDeleteModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        isDeleting={isPending}
+        isDeleting={isDeleting}
       />
     </div>
   );

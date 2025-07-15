@@ -136,7 +136,7 @@ const createNewCommunityDocument = async ({
   const documentId = crypto.randomUUID();
 
   const { data } = await apiClient.post(
-    `/communities/${communityId}/documents/${documentId}&timestamp=${Date.now()}`,
+    `/communities/${communityId}/documents/${documentId}`,
     formData,
     {
       headers: {

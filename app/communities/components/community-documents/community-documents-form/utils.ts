@@ -3,7 +3,7 @@ export const translateDocumentType = (documentType: string) => {
     case 'COMMUNITY_DOCUMENT':
       return 'Community document';
     case 'COMMUNITY_MODEL':
-      return 'Community model';
+      return 'Community contract model';
     case 'CONTRACT_DOCUMENT':
       return 'Contract document';
     default:
