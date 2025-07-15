@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '@/lib/api-client';
-import { Community, mapCommunitySchemaToCommunity } from '../model/community';
+import {
+  Community,
+  mapCommunitySchemaToCommunity,
+} from '../../model/community';
 
 const fetchCommunities = async (): Promise<Community[]> => {
   const { data } = await apiClient.get('/communities');

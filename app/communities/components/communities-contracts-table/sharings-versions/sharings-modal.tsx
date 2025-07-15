@@ -37,7 +37,11 @@ type Props = {
 
 const SharingsModal = ({ communityId, onClose }: Props) => {
   const [data, setData] = useState<SharingVersion[]>([]);
-  const { data: sharingVersions, refetch } = useSharingVersions(communityId);
+  const {
+    data: sharingVersions,
+    refetch,
+    isLoading,
+  } = useSharingVersions(communityId);
   const { mutate: deleteSharingVersion } = useDeleteSharingVersion({
     callback: refetch,
   });
@@ -128,7 +132,7 @@ const SharingsModal = ({ communityId, onClose }: Props) => {
 
   return (
     <div>
-      <Table>
+      <Table maxHeight="50vh">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -147,8 +151,11 @@ const SharingsModal = ({ communityId, onClose }: Props) => {
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody columnsNumber={columns.length}>
-          {table.getRowModel().rows?.length ? (
+        <TableBody
+          columnsNumber={columns.length}
+          isLoading={isLoading}
+          noItems={data.length === 0 && !isLoading}>
+          {table.getRowModel().rows?.length > 0 &&
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
@@ -159,14 +166,7 @@ const SharingsModal = ({ communityId, onClose }: Props) => {
                   </TableCell>
                 ))}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
+            ))}
         </TableBody>
       </Table>
       <DialogFooter className="mt-8">

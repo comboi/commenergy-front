@@ -7,5 +7,5 @@ type ContractPowerCellProps = {
 export const ContractPowerCell = ({
   contractPower,
 }: ContractPowerCellProps) => {
-  return <div>{contractPower} Kw</div>;
+  return <div>{contractPower} kWh</div>;
 };

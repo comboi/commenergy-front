@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 
 import { DialogFooter } from '@/components/ui/dialog';
-import { useDeleteCommunity } from '@/app/communities/services/useDeleteCommunity';
+import { useDeleteCommunity } from '@/app/communities/services/communities/useDeleteCommunity';
 import { Community } from '@/app/communities/model/community';
 
 type Props = {

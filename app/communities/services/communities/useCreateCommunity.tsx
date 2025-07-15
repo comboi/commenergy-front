@@ -2,8 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { Community, NewCommunityDto } from '../model/community';
-import apiClient from '../../../lib/api-client';
+import { Community, NewCommunityDto } from '../../model/community';
+import apiClient from '../../../../lib/api-client';
 
 const postCommunity = async (
   newCommunity: NewCommunityDto

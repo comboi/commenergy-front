@@ -1,7 +1,6 @@
 'use client';
 
-import { v7 } from 'uuid';
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -43,11 +42,12 @@ import {
   CommunityContractsProvider,
   useCommunityContracts as useCommunityContractsContext,
 } from './contexts/community-contracts-context';
+import { Community } from '../../model/community';
 
 interface CommunityContractsTableProps {
-  communityId: string;
-  communityName: string;
+  community: Community;
   refreshCommunityDetails: () => void;
+  isLoggedUserAdmin: boolean;
 }
 
 const TABLE_PAGINATION = {
@@ -57,10 +57,13 @@ const TABLE_PAGINATION = {
 
 // Table content component that uses the community contracts context
 const CommunityContractsTableContent = ({
-  communityId,
-  communityName,
+  community,
   refreshCommunityDetails,
+  isLoggedUserAdmin,
 }: CommunityContractsTableProps) => {
+  const communityId = community.id;
+  const communityName = community.name;
+
   const {
     filteredData,
     draftData,
@@ -75,6 +78,8 @@ const CommunityContractsTableContent = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddNewOpen, setIsAddNewOpen] = useState(false);
   const [selectedCommunityContract, setSelectedCommunityContract] =
+    useState<CommunityContract | null>(null);
+  const [selectedContractDocuments, setSelectedContractDocuments] =
     useState<CommunityContract | null>(null);
   const [isSharingOpen, setIsSharingOpen] = useState(false);
 
@@ -94,6 +99,7 @@ const CommunityContractsTableContent = ({
     setIsAddNewOpen(false);
     setIsDeleteModalOpen(false);
     setSelectedCommunityContract(null);
+    setSelectedContractDocuments(null);
     setIsCreateNewSharingsVersionOpen(false);
     setIsSharingOpen(false);
     refetch();
@@ -110,6 +116,13 @@ const CommunityContractsTableContent = ({
     (communityContract: CommunityContract) => {
       setSelectedCommunityContract(communityContract);
       setIsAddNewOpen(true);
+    },
+    []
+  );
+
+  const handleClickOpenDocuments = useCallback(
+    (communityContract: CommunityContract) => {
+      setSelectedContractDocuments(communityContract);
     },
     []
   );
@@ -194,6 +207,7 @@ const CommunityContractsTableContent = ({
         enableSorting: true,
         cell: ({ row }) => (
           <CommunityShareCell
+            isEditable={isLoggedUserAdmin}
             communityContract={row.original}
             originalData={originalData}
             onEditSharing={handleEditSharing}
@@ -205,6 +219,9 @@ const CommunityContractsTableContent = ({
         id: 'actions',
         cell: ({ row }) => (
           <ActionsCell
+            handleOpenDocuments={handleClickOpenDocuments}
+            areDocumentsReady={false}
+            isDisabled={!isLoggedUserAdmin}
             communityContract={row.original}
             onEdit={handleClickOpenEditModal}
             onDelete={handleClickOpenDeleteModal}
@@ -260,9 +277,10 @@ const CommunityContractsTableContent = ({
 
   const table = useReactTable(tableConfig);
 
-  // Memoize header props to prevent unnecessary re-renders
   const headerProps = useMemo(
     () => ({
+      isLoggedUserAdmin,
+      draftData,
       table,
       communityId,
       communityName,
@@ -271,6 +289,7 @@ const CommunityContractsTableContent = ({
       isAddNewOpen,
       isSharingOpen,
       isDeleteModalOpen,
+      selectedContractDocuments,
       isCreateNewSharingsVersionOpen,
       onAddNewOpen: () => setIsAddNewOpen(true),
       onSharingOpen: () => setIsSharingOpen(true),
@@ -278,6 +297,8 @@ const CommunityContractsTableContent = ({
       onExport: handleExport,
     }),
     [
+      isLoggedUserAdmin,
+      draftData,
       table,
       communityId,
       communityName,
@@ -285,6 +306,7 @@ const CommunityContractsTableContent = ({
       selectedCommunityContract,
       isAddNewOpen,
       isSharingOpen,
+      selectedContractDocuments,
       isDeleteModalOpen,
       isCreateNewSharingsVersionOpen,
       handleCloseAndUpdate,
@@ -346,30 +368,20 @@ const CommunityContractsTableContent = ({
               columnsNumber={columns.length}
               isLoading={isLoading}
               noItems={!isLoading && table.getRowModel().rows?.length === 0}>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center">
-                    No results.
-                  </TableCell>
+              {table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
                 </TableRow>
-              )}
+              ))}
             </TableBody>
           </Table>
         </div>
@@ -390,7 +402,7 @@ const CommunityContractsTableContent = ({
 export const CommunityContractsTable = (
   props: CommunityContractsTableProps
 ) => {
-  const { data: fetchedData = [] } = useCommunityContracts(props.communityId);
+  const { data: fetchedData = [] } = useCommunityContracts(props.community.id);
 
   return (
     <CommunityContractsProvider data={fetchedData}>

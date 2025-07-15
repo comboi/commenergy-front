@@ -4,6 +4,8 @@ const useTableModals = <T,>() => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [activeElement, setActiveElement] = useState<T | null>(null);
+  const [isShareCommunityModalOpen, setIsShareCommunityModalOpen] =
+    useState(false);
 
   return {
     isDeleteModalOpen,
@@ -12,6 +14,8 @@ const useTableModals = <T,>() => {
     setIsDeleteModalOpen,
     activeElement,
     setActiveElement,
+    isShareCommunityModalOpen,
+    setIsShareCommunityModalOpen,
   };
 };
 

@@ -22,7 +22,7 @@ const downloadFile = (content: string, filename: string, mimeType: string) => {
 /**
  * Formats a date string to a readable format
  */
-const formatDate = (dateString: string | null): string => {
+export const formatDate = (dateString: string | null): string => {
   if (!dateString) return 'N/A';
   try {
     return new Date(dateString).toLocaleDateString('en-US', {

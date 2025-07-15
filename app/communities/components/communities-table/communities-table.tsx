@@ -15,11 +15,11 @@ import {
 } from '@tanstack/react-table';
 import {
   ChevronDown,
-  Edit,
   EditIcon,
   EyeIcon,
-  Trash,
   TrashIcon,
+  UsersIcon,
+  FileText,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -39,12 +39,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useCommunities } from '@/app/communities/services/useCommunities';
+import { useCommunities } from '@/app/communities/services/communities/useCommunities';
 import { Community } from '@/app/communities/model/community';
 import useTableModals from '@/hooks/use-table-modals';
 import Modal from '@/components/modal/modal';
 import AddNewCommunityForm from './modals/add-new-community-form';
 import DeleteCommunityForm from './modals/delete-community-form';
+import { CommunityUsersForm } from '../community-users/community-users-form';
+import CommunityDocumentsForm from '../community-documents/community-documents-form/community-documents-form';
+import { useAuth } from '@/contexts/auth-context';
+import { CommunityAdminProvider } from '../../contexts/community-admin-context';
 
 export function CommunitiesTable() {
   const {
@@ -54,15 +58,21 @@ export function CommunitiesTable() {
     setIsEditModalOpen,
     activeElement,
     setActiveElement,
+    isShareCommunityModalOpen,
+    setIsShareCommunityModalOpen,
   } = useTableModals<Community>();
   const { data = [], refetch, isLoading } = useCommunities();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const { user: loggedUser } = useAuth();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [isDocumentsModalOpen, setIsDocumentsModalOpen] = React.useState(false);
+  const [selectedCommunityForDocuments, setSelectedCommunityForDocuments] =
+    React.useState<Community | null>(null);
 
   const handleClickOpenEditModal = (community: Community | null) => {
     setIsEditModalOpen(true);
@@ -76,8 +86,33 @@ export function CommunitiesTable() {
   const handleOnCloseModal = () => {
     setIsEditModalOpen(false);
     setIsDeleteModalOpen(false);
+    setIsShareCommunityModalOpen(false);
+    setIsDocumentsModalOpen(false);
     setActiveElement(null);
+    setSelectedCommunityForDocuments(null);
     refetch();
+  };
+
+  const handleOpenShareCommunityModal = (community: Community) => {
+    setIsShareCommunityModalOpen(true);
+    setActiveElement(community);
+  };
+
+  const handleOpenDocumentsModal = (community: Community) => {
+    setIsDocumentsModalOpen(true);
+    setSelectedCommunityForDocuments(community);
+  };
+
+  const getIsLoggedUserCommunityAdmin = (community: Community) => {
+    return (community.users ?? []).some(
+      (user) => user.userId === loggedUser?.id && user.role === 'admin'
+    );
+  };
+
+  const avatar = 'https://avatar.iran.liara.run/public/31';
+
+  const getCommunityLink = (community: Community) => {
+    return `/communities/${community.id}`;
   };
 
   const columns: ColumnDef<Community>[] = [
@@ -85,8 +120,10 @@ export function CommunitiesTable() {
       accessorKey: 'name',
       header: 'Name',
       cell: ({ row }) => (
-        <Link href={`/communities/${row.original.id}`}>
-          <div className="capitalize">{row.getValue('name')}</div>
+        <Link href={getCommunityLink(row.original)}>
+          <div className="capitalize hover:underline">
+            {row.getValue('name')}
+          </div>
         </Link>
       ),
     },
@@ -106,9 +143,10 @@ export function CommunitiesTable() {
     },
 
     {
-      accessorKey: 'power',
       header: 'Power',
-      cell: ({ row }) => <div>{row.getValue('power')}</div>,
+      cell: ({ row }) => (
+        <div>{`${row.original.capacity.totalGenerationPower} kWh`}</div>
+      ),
     },
     {
       accessorKey: 'address',
@@ -129,29 +167,73 @@ export function CommunitiesTable() {
       ),
     },
     {
+      header: 'Members',
+      cell: ({ row }) => {
+        const users = row.original.users;
+
+        const usersWithAvatar = users.slice(0, 3);
+
+        return (
+          <div className="flex items-center gap-2 min-w-[120px]">
+            <div>
+              {usersWithAvatar.map((user, index) => (
+                <img
+                  key={user.userId}
+                  src={avatar}
+                  className={`inline w-6 h-6 ${index > 0 ? '-ml-2' : ''}`}
+                  alt="avatar"
+                />
+              ))}
+            </div>
+            <div>{`${users.length} ${
+              users.length > 1 ? 'users' : 'user'
+            }`}</div>
+          </div>
+        );
+      },
+    },
+    {
       header: () => <div className="text-right">Actions</div>,
       id: 'actions',
       cell: ({ row }) => {
         const community = row.original;
         return (
           <div className="flex justify-end">
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => handleClickOpenEditModal(community)}>
-              <EditIcon />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => handleOpenDeleteEditModal(community)}>
-              <TrashIcon />
-            </Button>
-            <Button asChild size="icon" variant="ghost">
-              <Link href={`/communities/${community.id}`}>
-                <EyeIcon />
-              </Link>
-            </Button>
+            {getIsLoggedUserCommunityAdmin(community) ? (
+              <>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => handleOpenDocumentsModal(community)}>
+                  <FileText />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => handleClickOpenEditModal(community)}>
+                  <EditIcon />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => handleOpenDeleteEditModal(community)}>
+                  <TrashIcon />
+                </Button>
+
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => handleOpenShareCommunityModal(community)}>
+                  <UsersIcon />
+                </Button>
+              </>
+            ) : (
+              <Button size="icon" variant="ghost" onClick={() => {}}>
+                <Link href={getCommunityLink(community)}>
+                  <EyeIcon />
+                </Link>
+              </Button>
+            )}
           </div>
         );
       },
@@ -243,7 +325,7 @@ export function CommunitiesTable() {
             columnsNumber={columns.length}
             isLoading={isLoading}
             noItems={!isLoading && table.getRowModel().rows?.length === 0}>
-            {table.getRowModel().rows?.length &&
+            {table.getRowModel().rows?.length > 0 &&
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -297,6 +379,36 @@ export function CommunitiesTable() {
           onClose={handleOnCloseModal}
           communityToEdit={activeElement ?? undefined}
         />
+      </Modal>
+      <Modal
+        isOpen={isShareCommunityModalOpen}
+        onClose={() => setIsShareCommunityModalOpen(false)}
+        title="Community Users"
+        description="Add or remove users from the community">
+        {activeElement && (
+          <CommunityAdminProvider community={activeElement}>
+            <CommunityUsersForm
+              isOpen={isShareCommunityModalOpen}
+              onClose={handleOnCloseModal}
+              community={activeElement}
+            />
+          </CommunityAdminProvider>
+        )}
+      </Modal>
+      <Modal
+        className="max-w-[800px]"
+        isOpen={isDocumentsModalOpen}
+        onClose={handleOnCloseModal}
+        title="Community Documents"
+        description="Manage community model documents that serve as templates for contracts">
+        {selectedCommunityForDocuments && (
+          <CommunityAdminProvider community={selectedCommunityForDocuments}>
+            <CommunityDocumentsForm
+              onClose={handleOnCloseModal}
+              community={selectedCommunityForDocuments}
+            />
+          </CommunityAdminProvider>
+        )}
       </Modal>
       <Modal
         isOpen={isDeleteModalOpen}

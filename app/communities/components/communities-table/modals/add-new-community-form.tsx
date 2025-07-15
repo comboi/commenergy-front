@@ -9,8 +9,8 @@ import {
   NewCommunityDto,
 } from '@/app/communities/model/community';
 
-import { useUpdateCommunity } from '@/app/communities/services/useUpdateCommunity';
-import { useCreateCommunity } from '@/app/communities/services/useCreateCommunity';
+import { useUpdateCommunity } from '@/app/communities/services/communities/useUpdateCommunity';
+import { useCreateCommunity } from '@/app/communities/services/communities/useCreateCommunity';
 import InputField from '@/components/inputs/InputField';
 import Select from '@/components/inputs/Select';
 
@@ -37,7 +37,7 @@ const AddNewCommunityForm = ({ communityToEdit, onClose }: Props) => {
         energySourceType: 'SOLAR',
         status: 'INACTIVE',
         communityContracts: [],
-      } as unknown as NewCommunityDto);
+      } as NewCommunityDto);
 
   const [formData, setFormData] = useState<NewCommunityDto>(initialData);
 
@@ -76,19 +76,19 @@ const AddNewCommunityForm = ({ communityToEdit, onClose }: Props) => {
         <InputField
           label="Name"
           name="name"
-          value={formData.name}
+          value={formData.name ?? ''}
           onChange={handleChange}
         />
         <InputField
           label="Address"
           name="address"
-          value={formData.address}
+          value={formData.address ?? ''}
           onChange={handleChange}
         />
         <InputField
           label="Description"
           name="description"
-          value={formData.description}
+          value={formData.description ?? ''}
           onChange={handleChange}
         />
 
@@ -101,7 +101,7 @@ const AddNewCommunityForm = ({ communityToEdit, onClose }: Props) => {
             })
           }
           options={statusOptions}
-          value={formData.status}
+          value={formData.status ?? ''}
         />
 
         {!communityToEdit && <Button type="submit">Add Community</Button>}

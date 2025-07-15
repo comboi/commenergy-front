@@ -6,6 +6,7 @@ import { CommunityContract } from '@/app/communities/model/communityContract';
 import { getSharingDifference } from '../utils/get-sharing-difference';
 
 type CommunityShareCellProps = {
+  isEditable: boolean;
   communityContract: CommunityContract;
   originalData: CommunityContract[];
   onEditSharing: (
@@ -16,6 +17,7 @@ type CommunityShareCellProps = {
 
 export const CommunityShareCell = memo<CommunityShareCellProps>(
   ({
+    isEditable,
     communityContract,
     originalData,
     onEditSharing,
@@ -60,8 +62,12 @@ export const CommunityShareCell = memo<CommunityShareCellProps>(
           />
         ) : (
           <div
-            className="cursor-pointer flex items-center space-x-2"
-            onClick={() => setIsEditing(true)}>
+            className={`${
+              isEditable ? 'cursor-pointer' : ''
+            } flex items-center space-x-2`}
+            onClick={() => {
+              isEditable && setIsEditing(true);
+            }}>
             <span>{hasShare ? `${communityShare}%` : '-'}</span>
             {isShareEdited && !isHovered && (
               <span className="flex items-center">
@@ -75,7 +81,7 @@ export const CommunityShareCell = memo<CommunityShareCellProps>(
             )}
           </div>
         )}
-        {isHovered && !isEditing && (
+        {isHovered && !isEditing && isEditable && (
           <Button
             variant="ghost"
             className="h-8 w-8 ml-4"

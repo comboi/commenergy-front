@@ -4,24 +4,17 @@ export type CommunitySchema = components['schemas']['CommunityEnriched'];
 
 export type CommunityStatus = CommunitySchema['status'];
 
-export type Community = {
-  id: string;
-  name: string;
-  status: CommunityStatus;
+export type Community = CommunitySchema & {
   contracts: number;
   address: string;
-  capacity: CommunitySchema['capacity'];
 };
 
 export const mapCommunitySchemaToCommunity = (
   community: CommunitySchema
 ): Community => ({
-  id: community.id,
-  name: community.name,
-  status: community.status,
+  ...community,
   contracts: community.communityContracts.length,
   address: community.address ?? '',
-  capacity: community.capacity,
 });
 
 export type NewCommunityDto = Partial<CommunitySchema>;

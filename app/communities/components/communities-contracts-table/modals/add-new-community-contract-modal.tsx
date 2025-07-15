@@ -41,7 +41,9 @@ const AddNewCommunityContractModal = ({
   const [pendingContractId, setPendingContractId] = useState<string | null>(
     null
   );
-  const { data: contracts, refetch: refetchContractOptions } = useContracts();
+  const { data: contracts, refetch: refetchContractOptions } = useContracts({
+    ownerType: null,
+  });
   const { mutate: createCommunityContract } = useCreateCommunityContract({
     callback: onClose,
   });
@@ -147,12 +149,17 @@ const AddNewCommunityContractModal = ({
     }
   };
 
+  const isSelectedContractGeneration =
+    contracts?.find((contract) => contract.id === formData.contractId)
+      ?.contractType === 'GENERATION';
+
   return (
     <>
       <form onSubmit={handleSubmit}>
         <div className="space-y-4 flex flex-col gap-2 py-4">
           <Select
             label="Contract"
+            disabled={!!communityContractToEdit}
             id="contractId"
             onAddNewOption={handleCreateNewContract}
             addNewOptionLabel="Add new contract"
@@ -165,25 +172,29 @@ const AddNewCommunityContractModal = ({
             options={mapOptionsToCommunitySelect}
             value={formData.contractId}
           />
-          <InputField
-            label="Community Fee (€)"
-            name="communityFee"
-            type="number"
-            value={formData.communityFee}
-            onChange={handleChange}
-          />
-          <Select
-            label="Fee Period Type"
-            onChange={(value) =>
-              setFormData({
-                ...formData,
-                communityFeePeriodType:
-                  value as FormData['communityFeePeriodType'],
-              })
-            }
-            options={feePeriodOptions}
-            value={formData.communityFeePeriodType}
-          />
+          {!isSelectedContractGeneration && (
+            <>
+              <InputField
+                label="Community Fee (€)"
+                name="communityFee"
+                type="number"
+                value={formData.communityFee}
+                onChange={handleChange}
+              />
+              <Select
+                label="Fee Period Type"
+                onChange={(value) =>
+                  setFormData({
+                    ...formData,
+                    communityFeePeriodType:
+                      value as FormData['communityFeePeriodType'],
+                  })
+                }
+                options={feePeriodOptions}
+                value={formData.communityFeePeriodType}
+              />
+            </>
+          )}
 
           <InputField
             label="Terms Agreement"

@@ -10,11 +10,16 @@ import { Button } from '@/components/ui/button';
 type Props = {
   community: Community;
   onUpdate: () => void;
+  isEditable?: boolean;
 };
 
-export function CommunityDetails({ community, onUpdate }: Props) {
+export function CommunityDetails({
+  community,
+  onUpdate,
+  isEditable = false,
+}: Props) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { status, contracts, address, capacity } = community;
+  const { status, contracts, capacity } = community;
 
   const handleUpdateEditModal = () => {
     setIsEditModalOpen(false);
@@ -25,12 +30,14 @@ export function CommunityDetails({ community, onUpdate }: Props) {
     <div className="flex flex-col gap-4">
       <div className="flex flex-row items-center justify-between">
         <h1 className="text-3xl font-bold">{community.name}</h1>
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={() => setIsEditModalOpen(true)}>
-          <EditIcon />
-        </Button>
+        {isEditable && (
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => setIsEditModalOpen(true)}>
+            <EditIcon />
+          </Button>
+        )}
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -60,7 +67,7 @@ export function CommunityDetails({ community, onUpdate }: Props) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {capacity.totalGenerationPower} kws
+              {capacity.totalGenerationPower} kWh
             </div>
           </CardContent>
         </Card>

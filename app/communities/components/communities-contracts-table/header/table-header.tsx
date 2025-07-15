@@ -19,8 +19,11 @@ import { AddNewSharingsVersionModal } from '../sharings-versions/add-new-sharing
 import { ActionsDropdown } from './actions-dropdown';
 import { CommunityContractsSearch } from '../components/community-contracts-search';
 import { ContractTypeToggle } from '../components/contract-type-toggle';
+import CommunityContractDocumentsForm from '../modals/community-contract-documents-form';
 
 type CommunityContractsTableHeaderProps = {
+  isLoggedUserAdmin: boolean;
+  draftData: CommunityContract[];
   table: Table<CommunityContract>;
   communityId: string;
   communityName: string;
@@ -34,11 +37,14 @@ type CommunityContractsTableHeaderProps = {
   onSharingOpen: () => void;
   onCloseAndUpdate: () => void;
   onExport: (format: 'txt' | 'csv') => void;
+  selectedContractDocuments: CommunityContract | null;
 };
 
 export const CommunityContractsTableHeader =
   memo<CommunityContractsTableHeaderProps>(
     ({
+      isLoggedUserAdmin,
+      draftData,
       table,
       communityId,
       communityName,
@@ -48,6 +54,7 @@ export const CommunityContractsTableHeader =
       isSharingOpen,
       isDeleteModalOpen,
       isCreateNewSharingsVersionOpen,
+      selectedContractDocuments,
       onAddNewOpen,
       onSharingOpen,
       onCloseAndUpdate,
@@ -60,7 +67,7 @@ export const CommunityContractsTableHeader =
             <div className="flex items-center space-x-2">
               <CommunityContractsSearch />
               <ContractTypeToggle />
-              <ActionsDropdown onExport={onExport} />
+              {isLoggedUserAdmin && <ActionsDropdown onExport={onExport} />}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline">
@@ -86,18 +93,21 @@ export const CommunityContractsTableHeader =
                     })}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button onClick={onSharingOpen} variant="outline">
-                Sharings
-                <History />
-              </Button>
-              <Button onClick={onAddNewOpen}>
-                Add contract
-                <PlusCircle />
-              </Button>
+              {isLoggedUserAdmin && (
+                <>
+                  <Button onClick={onSharingOpen} variant="outline">
+                    Sharings
+                    <History />
+                  </Button>
+                  <Button onClick={onAddNewOpen}>
+                    Add contract
+                    <PlusCircle />
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
-          {/* Modals */}
           <Modal
             isOpen={isAddNewOpen}
             onClose={onCloseAndUpdate}
@@ -140,12 +150,25 @@ export const CommunityContractsTableHeader =
             title="Create new sharings version"
             description={`specify the details of this new version of the community sharings sharings`}>
             <AddNewSharingsVersionModal
-              sharings={data.map((contract) => contract.sharing)}
+              sharings={draftData.map((contract) => contract.sharing)}
               communityId={communityId}
               onClose={async () => {
                 onCloseAndUpdate();
               }}
             />
+          </Modal>
+          <Modal
+            className="max-w-[800px]"
+            isOpen={Boolean(selectedContractDocuments)}
+            onClose={onCloseAndUpdate}
+            title="Community contract documents"
+            description={`See below the documents of the selected contract`}>
+            {selectedContractDocuments && (
+              <CommunityContractDocumentsForm
+                onClose={onCloseAndUpdate}
+                communityContract={selectedContractDocuments}
+              />
+            )}
           </Modal>
         </div>
       );

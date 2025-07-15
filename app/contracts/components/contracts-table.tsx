@@ -31,16 +31,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Contract } from '@/app/contracts/model/contract';
+import { Contract, ContractUserRole } from '@/app/contracts/model/contract';
 import { useContracts } from '@/app/contracts/services/useContracts';
 import UserTooltip from '@/app/users/components/user-tooltip';
 import AddNewContractForm from './add-new-contract/add-new-contract-form';
 import Modal from '@/components/modal/modal';
 import DeleteContractForm from './add-new-contract/delete-contract-form';
 import TooltipEllipsisText from '@/components/ui/TooltipElipsis';
+import { ContractRoleSwitch } from './ContractRoleSwitch';
 
 export function ContractsTable() {
-  const { data, refetch, isLoading } = useContracts();
+  const [contractsOwnerType, setContractsOwnerType] =
+    React.useState<ContractUserRole | null>(null);
+  const { data, refetch, isLoading } = useContracts({
+    ownerType: contractsOwnerType,
+  });
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -54,15 +59,15 @@ export function ContractsTable() {
     Contract | undefined
   >(undefined);
 
-  const handleEditClick = (contract: Contract) => {
+  const handleEditClick = React.useCallback((contract: Contract) => {
     setActiveContract(contract);
     setIsModalDetailOpen(true);
-  };
+  }, []);
 
-  const handleDeleteClick = (contract: Contract) => {
+  const handleDeleteClick = React.useCallback((contract: Contract) => {
     setActiveContract(contract);
     setIsDeleteModalOpen(true);
-  };
+  }, []);
 
   const columns: ColumnDef<Contract>[] = React.useMemo(
     () => [
@@ -173,28 +178,34 @@ export function ContractsTable() {
     },
   });
 
-  const handleAddNewClick = () => {
+  const handleAddNewClick = React.useCallback(() => {
     setActiveContract(undefined);
     setIsModalDetailOpen(true);
-  };
+  }, []);
 
-  const handleOnCloseModal = () => {
+  const handleOnCloseModal = React.useCallback(() => {
     setIsDeleteModalOpen(false);
     setIsModalDetailOpen(false);
     refetch();
-  };
+  }, [refetch]);
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter contracts..."
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('name')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div className="flex gap-4">
+          <Input
+            placeholder="Filter contracts..."
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            onChange={(event) =>
+              table.getColumn('name')?.setFilterValue(event.target.value)
+            }
+            className="min-w-[200px] max-w-sm"
+          />
+          <ContractRoleSwitch
+            setActiveRoles={setContractsOwnerType}
+            roleActive={contractsOwnerType}
+          />
+        </div>
         <div className="flex gap-4  justify-end w-full">
           <div>
             <DropdownMenu>
@@ -279,7 +290,7 @@ export function ContractsTable() {
             columnsNumber={columns.length}
             isLoading={isLoading}
             noItems={!isLoading && table.getRowModel().rows?.length === 0}>
-            {table.getRowModel().rows?.length &&
+            {table.getRowModel().rows?.length > 0 &&
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

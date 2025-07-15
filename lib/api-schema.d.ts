@@ -36,6 +36,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/community-contracts/{communityContractId}/documents/{documentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload a document to a community
+         * @description Uploads a single file and associates it with a specific communityContract and document ID
+         */
+        post: operations["CommunityContractDocumentsController_addDocumentToCommunityContract"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/community-contracts/{communityContractId}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommunityContractDocumentsController_getCommunityContractDocuments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/sharing-versions": {
         parameters: {
             query?: never;
@@ -148,6 +184,77 @@ export interface paths {
         patch: operations["SharingsController_updateSharing"];
         trace?: never;
     };
+    "/contract-users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all contract user relationships */
+        get: operations["ContractUsersController_getContractUsers"];
+        put?: never;
+        /** Create a new contract user relationship */
+        post: operations["ContractUsersController_createContractUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/contract-users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get contract user relationship by ID */
+        get: operations["ContractUsersController_getContractUserById"];
+        put?: never;
+        post?: never;
+        /** Delete contract user relationship */
+        delete: operations["ContractUsersController_deleteContractUser"];
+        options?: never;
+        head?: never;
+        /** Update contract user relationship */
+        patch: operations["ContractUsersController_updateContractUser"];
+        trace?: never;
+    };
+    "/contract-users/contract/{contractId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all users for a specific contract */
+        get: operations["ContractUsersController_getContractUsersByContractId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/contract-users/user/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all contracts for a specific user */
+        get: operations["ContractUsersController_getContractUsersByUserId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/documents/{id}": {
         parameters: {
             query?: never;
@@ -239,6 +346,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["UsersController_register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/register-pending": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UsersController_registerPending"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/vat/{vat}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getUserByVat"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -341,6 +480,22 @@ export interface paths {
         patch: operations["CommunitiesController_patchCommunity"];
         trace?: never;
     };
+    "/communities/{id}/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommunitiesController_getCommunityUsers"];
+        put: operations["CommunitiesController_updateUsers"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/communities/{id}/user-request": {
         parameters: {
             query?: never;
@@ -403,6 +558,50 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["CommunitiesRequestsController_AcceptRequestContractToCommunity"];
+        trace?: never;
+    };
+    "/communities/{id}/documents/{documentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload a document to a community
+         * @description Uploads a single file and associates it with a specific community and document ID
+         */
+        post: operations["CommunitiesDocumentsController_addDocumentToCommunity"];
+        /**
+         * Delete a community document
+         * @description Deletes a specific document from a community
+         */
+        delete: operations["CommunitiesDocumentsController_deleteCommunityDocument"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/communities/{id}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get community documents
+         * @description Retrieves all documents associated with a specific community
+         */
+        get: operations["CommunitiesDocumentsController_getCommunityDocuments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/energy-providers": {
@@ -485,11 +684,11 @@ export interface components {
             /** @example ES12345678A */
             vat: string;
             /** @example +34600123456 */
-            mobile: string;
+            mobile?: string | null;
             /** @example user@example.com */
-            email: string;
+            email?: string | null;
             /** @example John Doe */
-            name: string;
+            name?: string | null;
             /**
              * @example ACTIVE
              * @enum {string}
@@ -655,6 +854,33 @@ export interface components {
             /** @example Shares of the contract with the community and different versions */
             sharing: components["schemas"]["SharingEnriched"] | null;
         };
+        Document: {
+            /** @example document.pdf */
+            name: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            id: string;
+            /** @example https://example.com/document.pdf */
+            url: string;
+            /** @example media123 */
+            mediaId: string;
+            /** @example 2025-06-11T10:30:00.000Z */
+            createdAt: string;
+            /**
+             * @example COMMUNITY_DOCUMENT
+             * @enum {string}
+             */
+            documentType: "COMMUNITY_MODEL" | "COMMUNITY_DOCUMENT" | "CONTRACT_DOCUMENT";
+            /** @example This is a detailed description of the document */
+            longDescription?: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174001 */
+            relatedDocumentId?: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174002 */
+            communityId?: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174003 */
+            communityContractId?: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174004 */
+            termsAgreementId?: string;
+        };
         SharingDto: {
             /** @example 550e8400-e29b-41d4-a716-446655440000 */
             id: string;
@@ -715,15 +941,46 @@ export interface components {
              */
             updatedDate: string;
         };
-        Document: {
-            /** @example document.pdf */
-            name: string;
+        CreateContractUserDto: {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             id: string;
-            /** @example https://example.com/document.pdf */
-            url: string;
-            /** @example media123 */
-            mediaId: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            contractId: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            userId: string;
+            /**
+             * @example partner
+             * @enum {string}
+             */
+            role: "owner" | "partner" | "viewer";
+            /** @example read,write,share */
+            permissions?: string;
+        };
+        ContractUser: {
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            id: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            contractId: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            userId: string;
+            /**
+             * @example partner
+             * @enum {string}
+             */
+            role: "owner" | "partner" | "viewer";
+            /** @example 2023-10-01T00:00:00.000Z */
+            sharedAt: string;
+            /** @example read,write,share */
+            permissions: string;
+        };
+        UpdateContractUserDto: {
+            /**
+             * @example partner
+             * @enum {string}
+             */
+            role?: "owner" | "partner" | "viewer";
+            /** @example read,write,share */
+            permissions?: string;
         };
         TermsAgreementDto: {
             /** @example 550e8400-e29b-41d4-a716-446655440000 */
@@ -762,18 +1019,27 @@ export interface components {
             /** @example ES12345678A */
             vat: string;
             /** @example +34600123456 */
-            mobile: string;
+            mobile?: string | null;
             /** @example user@example.com */
-            email: string;
+            email?: string | null;
             /** @example John Doe */
-            name: string;
+            name?: string | null;
             /** @example password123 */
-            password: string;
+            password?: string | null;
             /**
              * @example ACTIVE
              * @enum {string}
              */
             status: "ACTIVE" | "INACTIVE" | "PENDING_TO_CLAIM";
+        };
+        CreatePendingUserDto: {
+            /**
+             * Format: uuid
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            id: string;
+            /** @example 7311413M */
+            vat: string;
         };
         LoginDto: {
             /** @example johndoe@email.com */
@@ -809,15 +1075,13 @@ export interface components {
             state: "Active" | "Inactive";
             /** @example Carrer de la Marina, 16 */
             fullAddress: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            user: string;
             /** @example [] */
             communityContracts: string[];
             /**
              * @example SOLAR
-             * @enum {string}
+             * @enum {string|null}
              */
-            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO";
+            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO" | null;
             /** @example [] */
             contractsCommunitiesRequests: string[];
             /** @example [] */
@@ -897,6 +1161,46 @@ export interface components {
             /** @example ES123123123123123123FF123 */
             locationCode: string;
         };
+        CommunityUser: {
+            /**
+             * Format: uuid
+             * @description User ID
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            userId: string;
+            /**
+             * Format: uuid
+             * @description Community ID
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            communityId: string;
+            /**
+             * @description User role in the community
+             * @example admin
+             * @enum {string}
+             */
+            role: "admin" | "user" | "partner";
+            /**
+             * @description User VAT number
+             * @example ES12345678A
+             */
+            vat: string;
+            /**
+             * @description User name
+             * @example John Doe
+             */
+            name?: Record<string, never>;
+            /**
+             * @description User email
+             * @example user@example.com
+             */
+            email?: Record<string, never>;
+            /**
+             * @description User mobile phone
+             * @example +34600123456
+             */
+            mobile?: Record<string, never>;
+        };
         Community: {
             /**
              * Format: uuid
@@ -923,7 +1227,7 @@ export interface components {
              *         "role": "admin"
              *       }
              *     ] */
-            users: string[];
+            users: components["schemas"]["CommunityUser"][];
             /**
              * Format: string
              * @description Location code
@@ -995,7 +1299,7 @@ export interface components {
              *         "role": "admin"
              *       }
              *     ] */
-            users: string[];
+            users: components["schemas"]["CommunityUser"][];
             /**
              * Format: string
              * @description Location code
@@ -1075,6 +1379,24 @@ export interface components {
             status?: "PENDING_TO_BE_CONSTITUTED" | "CONSTITUTED" | "ACTIVE" | "INACTIVE";
             /** @example ES123123123123123123FF123 */
             locationCode?: string;
+        };
+        UpdateCommunityUserDto: {
+            /**
+             * Format: uuid
+             * @description User ID
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            userId: string;
+            /**
+             * @description User role in the community
+             * @example user
+             * @enum {string}
+             */
+            role: "admin" | "user" | "partner";
+        };
+        BulkUpdateCommunityUsersDto: {
+            /** @description Array of user updates */
+            users: components["schemas"]["UpdateCommunityUserDto"][];
         };
     };
     responses: never;
@@ -1196,6 +1518,79 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    CommunityContractDocumentsController_addDocumentToCommunityContract: {
+        parameters: {
+            query: {
+                relatedDocumentId: string;
+            };
+            header?: never;
+            path: {
+                communityContractId: string;
+                /** @description Document ID to assign to the uploaded file */
+                documentId: string;
+                /** @description Community ID */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description The file to upload
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Document successfully uploaded and associated with the community */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description No file selected to upload */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error uploading the document */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunityContractDocumentsController_getCommunityContractDocuments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"];
+                };
             };
         };
     };
@@ -1369,6 +1764,195 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Sharing"];
+                };
+            };
+        };
+    };
+    ContractUsersController_getContractUsers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of contract user relationships retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"][];
+                };
+            };
+        };
+    };
+    ContractUsersController_createContractUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateContractUserDto"];
+            };
+        };
+        responses: {
+            /** @description Contract user relationship created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"];
+                };
+            };
+            /** @description Contract user relationship already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_getContractUserById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Contract user relationship ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Contract user relationship retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"];
+                };
+            };
+            /** @description Contract user relationship not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_deleteContractUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Contract user relationship ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Contract user relationship deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Contract user relationship not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_updateContractUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Contract user relationship ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateContractUserDto"];
+            };
+        };
+        responses: {
+            /** @description Contract user relationship updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"];
+                };
+            };
+            /** @description Contract user relationship not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_getContractUsersByContractId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Contract ID */
+                contractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Contract users retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"][];
+                };
+            };
+        };
+    };
+    ContractUsersController_getContractUsersByUserId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description User ID */
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User contracts retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"][];
                 };
             };
         };
@@ -1549,6 +2133,52 @@ export interface operations {
             };
         };
     };
+    UsersController_registerPending: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePendingUserDto"];
+            };
+        };
+        responses: {
+            /** @description The pending user has been successfully created. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
+    UsersController_getUserByVat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vat: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved the user by VAT. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
     UsersController_me: {
         parameters: {
             query?: never;
@@ -1592,7 +2222,9 @@ export interface operations {
     };
     ContractsController_getContracts: {
         parameters: {
-            query?: never;
+            query: {
+                ownerType: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1832,6 +2464,52 @@ export interface operations {
             };
         };
     };
+    CommunitiesController_getCommunityUsers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityUser"][];
+                };
+            };
+        };
+    };
+    CommunitiesController_updateUsers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkUpdateCommunityUsersDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityUser"][];
+                };
+            };
+        };
+    };
     CommunitiesRequestsController_getUserRequests: {
         parameters: {
             query?: never;
@@ -1941,6 +2619,152 @@ export interface operations {
         requestBody?: never;
         responses: {
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunitiesDocumentsController_addDocumentToCommunity: {
+        parameters: {
+            query: {
+                type: string;
+            };
+            header?: never;
+            path: {
+                /** @description Community ID */
+                id: string;
+                /** @description Document ID to assign to the uploaded file */
+                documentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description The file to upload
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Document successfully uploaded and associated with the community */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No file selected to upload */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error uploading the document */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunitiesDocumentsController_deleteCommunityDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Community ID */
+                id: string;
+                /** @description Document ID to delete */
+                documentId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Document successfully deleted from the community */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Document or community not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error deleting the document */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunitiesDocumentsController_getCommunityDocuments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Community ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved community documents */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"][];
+                };
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Community not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error retrieving community documents */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };

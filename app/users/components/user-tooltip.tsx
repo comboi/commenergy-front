@@ -24,12 +24,12 @@ const UserTooltip = ({ user, children }: Props) => {
           </div>
         </TooltipTrigger>
         <TooltipPortal>
-          <TooltipContent className="TooltipContent" sideOffset={5}>
+          <TooltipContent className="z-10" sideOffset={5}>
             <ul className="list-none p-4 m-0 bg-black text-xs border rounded-md flex flex-col gap-1">
               <li>Id: {user.id}</li>
-              <li>User: {user.name}</li>
-              <li>Phone: {user.mobile}</li>
-              <li>Name: {user.name}</li>
+              {user.name && <li>User: {user.name}</li>}
+              {user.mobile && <li>Phone: {user.mobile}</li>}
+              {user.email && <li>Name: {user.email}</li>}
               <li>VAT: {user.vat}</li>
             </ul>
           </TooltipContent>

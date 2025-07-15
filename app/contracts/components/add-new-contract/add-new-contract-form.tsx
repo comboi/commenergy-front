@@ -8,10 +8,11 @@ import { v4 } from 'uuid';
 import { Contract, NewContractDto } from '../../model/contract';
 
 import Select from '@/components/inputs/Select';
-import { useUsers } from '@/app/users/services/useUsers';
+
 import { useCreateContracts } from '../../services/useCreateContract';
 import { useProviders } from '@/app/shared/providers/services/useProviders';
 import { useUpdateContract } from '../../services/useUpdateContract';
+import { useAuth } from '@/contexts/auth-context';
 
 type Props = {
   onClose: (contractId: string) => void;
@@ -31,14 +32,13 @@ const mapContractToNewContractDto = (contract: Contract): NewContractDto => ({
   state: contract.state,
   contractPower: contract.contractPower ?? 0,
   fullAddress: contract.fullAddress,
-  user: contract.user.id,
   userVat: contract.userVat,
   energySourceType: contract.energySourceType,
 });
 
 const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
-  const { data: users } = useUsers();
   const { data: providers } = useProviders();
+  const { user } = useAuth();
 
   const { mutate: createContract } = useCreateContracts({ callback: onClose });
   const { mutate: updateContract } = useUpdateContract({ callback: onClose });
@@ -58,8 +58,7 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
         state: 'Active',
         contractPower: 0,
         fullAddress: '',
-        user: '',
-        userVat: '',
+        userVat: user?.vat || '',
       } as unknown as NewContractDto);
 
   const [formData, setFormData] = useState<NewContractDto>(initialData);
@@ -111,7 +110,7 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
         <div className="flex flex-col gap-4">
-          <Label htmlFor="provider">Contracted Power (KW's)</Label>
+          <Label htmlFor="contractedPower">Power (kWh)</Label>
           <Input
             type="number"
             name="contractPower"
@@ -145,6 +144,22 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
         <div className="flex flex-col gap-4">
+          <Label htmlFor="state">Contract Status*</Label>
+          <Select
+            onChange={(value) =>
+              setFormData({
+                ...formData,
+                state: value as NewContractDto['state'],
+              })
+            }
+            options={[
+              { value: 'Active', label: 'Active' },
+              { value: 'Inactive', label: 'Inactive' },
+            ]}
+            value={formData.state}
+          />
+        </div>
+        <div className="flex flex-col gap-4">
           <Label htmlFor="fullAddress">Full Address</Label>
           <Input
             type="text"
@@ -154,24 +169,10 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
         <div className="flex flex-col gap-4">
-          <Label htmlFor="user">User</Label>
-          <Select
-            onChange={(value) =>
-              setFormData({
-                ...formData,
-                user: value as NewContractDto['user'],
-                userVat: users?.find((user) => user.id === value)?.vat ?? '',
-              })
-            }
-            options={users?.map((user) => ({
-              value: user.id,
-              label: `${user.vat} - ${user.name}`,
-            }))}
-            value={formData.user}
-          />
-        </div>
-        <div className="flex flex-col gap-4">
           <Label htmlFor="user">User Vat*</Label>
+          <small className="text-muted-foreground">
+            If the user VAT didn't exist this will create a new user
+          </small>
           <Input
             type="text"
             name="userVat"

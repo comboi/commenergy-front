@@ -15,7 +15,11 @@ type Props = {
 };
 
 export function useCreateContracts({ callback }: Props) {
-  const { data, error, isSuccess, isError, ...rest } = useMutation<Contract>({
+  const { data, error, isSuccess, isError, ...rest } = useMutation<
+    Contract,
+    Error,
+    NewContractDto
+  >({
     mutationKey: ['contracts'],
     mutationFn: (newContract: NewContractDto) => postContract(newContract),
     onError: (error) => {

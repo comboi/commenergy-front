@@ -42,7 +42,7 @@ export const SharingsVersionUpdateBar = ({
       className={`transition-all sticky flex justify-between items-center gap-2 ${
         isDirty ? 'block' : 'hidden'
       } left-0 p-4 bg-slate-200 rounded-sm text-black bottom-0`}>
-      <div className="flex flex-wrap gap-1 gap-4">
+      <div className="flex flex-wrap gap-4">
         {sharingActiveVersion
           ? `Editing: ${sharingActiveVersion.name}`
           : 'Create your first version'}
