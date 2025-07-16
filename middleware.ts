@@ -3,7 +3,9 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const isAuthenticated = request.cookies.get('auth-token');
-  const isAuthPage = request.nextUrl.pathname.startsWith('/login');
+  const isAuthPage =
+    request.nextUrl.pathname.startsWith('/login') ||
+    request.nextUrl.pathname.startsWith('/register');
 
   if (!isAuthenticated && !isAuthPage) {
     return NextResponse.redirect(new URL('/login', request.url));

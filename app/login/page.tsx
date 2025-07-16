@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -29,16 +30,25 @@ export default function Login() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <Button type="submit" className="w-full">
           Login
         </Button>
+
+        <p className="text-center text-sm text-gray-600">
+          Don't have an account?{' '}
+          <Link href="/register" className="text-white  hover:underline">
+            Sign up
+          </Link>
+        </p>
       </form>
     </div>
   );
