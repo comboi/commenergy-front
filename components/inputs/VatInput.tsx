@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CheckCircle, XCircle, Loader2, User as UserIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { useUserByVat } from '@/app/users/services/useUserByVat';
-import { User } from '@/app/users/model/user';
-import UserTooltip from '@/app/users/components/user-tooltip';
+import { useUserByVat } from '@/app/platform/users/services/useUserByVat';
+import { User } from '@/app/platform/users/model/user';
+import UserTooltip from '@/app/platform/users/components/user-tooltip';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 interface VatInputProps {
@@ -16,6 +16,8 @@ interface VatInputProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  tooltipAlign?: 'start' | 'center' | 'end';
+  validateOnMount?: boolean;
 }
 
 const VatInput = ({
@@ -24,8 +26,9 @@ const VatInput = ({
   onUserFound,
   onValidationChange,
   placeholder = 'VAT Number',
-  className = '',
+  tooltipAlign = 'center',
   disabled = false,
+  validateOnMount = false,
 }: VatInputProps) => {
   const [vatToValidate, setVatToValidate] = useState<string>('');
   const [hasBlurred, setHasBlurred] = useState(false);
@@ -64,6 +67,14 @@ const VatInput = ({
       setVatToValidate(trimmedValue);
     }
   };
+
+  // Validate on mount if validateOnMount is true and value is provided
+  useEffect(() => {
+    if (validateOnMount && value.trim() && !vatToValidate && !hasBlurred) {
+      setHasBlurred(true);
+      setVatToValidate(value.trim());
+    }
+  }, [validateOnMount, value, vatToValidate, hasBlurred]);
 
   // Notify parent components when validation changes
   useEffect(() => {
@@ -132,7 +143,7 @@ const VatInput = ({
           )}
           {validationStatus === 'valid' && foundUser && (
             <Tooltip>
-              <TooltipContent side="top" align="center">
+              <TooltipContent side="top" align={tooltipAlign}>
                 {foundUser.email}
               </TooltipContent>
               <TooltipTrigger asChild>

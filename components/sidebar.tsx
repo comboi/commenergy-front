@@ -16,13 +16,13 @@ import {
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { useAuth } from '@/contexts/auth-context';
+import { useAuth } from '@/app/platform/auth/contexts/auth-context';
 
 const sidebarItems = [
   // { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
   // { icon: Users, label: 'Users', href: '/users' },
-  { icon: FileText, label: 'Contracts', href: '/contracts' },
-  { icon: Home, label: 'Communities', href: '/communities' },
+  { icon: FileText, label: 'Contracts', href: '/platform/contracts' },
+  { icon: Home, label: 'Communities', href: '/platform/communities' },
 ];
 
 export function Sidebar() {

@@ -4,46 +4,18 @@
  */
 
 export interface paths {
-    "/community-contracts/community/{communityId}": {
+    "/data-sources/types": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["CommunityContractsController_getCommunityContracts"];
-        put?: never;
-        post: operations["CommunityContractsController_createCommunityContract"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/community-contracts/community/{communityId}/contract/{communityContractId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CommunityContractsController_getCommunityContract"];
-        put: operations["CommunityContractsController_updateContract"];
-        post?: never;
-        delete: operations["CommunityContractsController_deleteContract"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/community-contracts/community/{communityId}/contract/{communityContractId}/terms-agreement": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CommunityContractsController_getTermsAgreementByCommunityContractId"];
+        /**
+         * Get available data source types
+         * @description Retrieves all available data source types with their basic information
+         */
+        get: operations["DataSourcesController_getDataSourceTypes"];
         put?: never;
         post?: never;
         delete?: never;
@@ -52,7 +24,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/community-contracts/{communityContractId}/documents/{documentId}": {
+    "/data-sources/configurations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all data source configurations
+         * @description Retrieves detailed configuration requirements for all data source types
+         */
+        get: operations["DataSourcesController_getAllConfigurations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/data-sources/configurations/{type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get configuration for a specific data source type
+         * @description Retrieves detailed configuration requirements for a specific data source type
+         */
+        get: operations["DataSourcesController_getConfigurationByType"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/data-sources": {
         parameters: {
             query?: never;
             header?: never;
@@ -62,56 +74,28 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Upload a document to a community
-         * @description Uploads a single file and associates it with a specific communityContract and document ID
+         * Create a new data source
+         * @description Creates a new data source for a specific contract
          */
-        post: operations["CommunityContractDocumentsController_addDocumentToCommunityContract"];
+        post: operations["DataSourcesController_createDataSource"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/community-contracts/{communityContractId}/documents": {
+    "/data-sources/contract/{contractId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["CommunityContractDocumentsController_getCommunityContractDocuments"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/sharing-versions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["SharingVersionsController_createVersionBulk"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/sharing-versions/{communityId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["SharingVersionsController_getVersionsByCommunityId"];
+        /**
+         * Get all data sources for a contract
+         * @description Retrieves all data sources associated with a specific contract
+         */
+        get: operations["DataSourcesController_getDataSourcesByContract"];
         put?: never;
         post?: never;
         delete?: never;
@@ -120,152 +104,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sharing-versions/{sharingVersionId}": {
+    "/data-sources/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
+        /**
+         * Get a data source by ID
+         * @description Retrieves a specific data source by its ID
+         */
+        get: operations["DataSourcesController_getDataSourceById"];
+        /**
+         * Update a data source
+         * @description Updates an existing data source with new information
+         */
+        put: operations["DataSourcesController_updateDataSource"];
         post?: never;
-        delete: operations["SharingVersionsController_deleteSharingVersion"];
-        options?: never;
-        head?: never;
-        patch: operations["SharingVersionsController_updateSharingVersion"];
-        trace?: never;
-    };
-    "/sharing-versions/{sharingVersionId}/set-production": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["SharingVersionsController_setSharingVersionProduction"];
-        trace?: never;
-    };
-    "/sharings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["SharingsController_createCommunityContract"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/sharings/{communityContractId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["SharingsController_getSharingsById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/sharings/{sharingId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["SharingsController_updateSharing"];
-        trace?: never;
-    };
-    "/contract-users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all contract user relationships */
-        get: operations["ContractUsersController_getContractUsers"];
-        put?: never;
-        /** Create a new contract user relationship */
-        post: operations["ContractUsersController_createContractUser"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/contract-users/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get contract user relationship by ID */
-        get: operations["ContractUsersController_getContractUserById"];
-        put?: never;
-        post?: never;
-        /** Delete contract user relationship */
-        delete: operations["ContractUsersController_deleteContractUser"];
-        options?: never;
-        head?: never;
-        /** Update contract user relationship */
-        patch: operations["ContractUsersController_updateContractUser"];
-        trace?: never;
-    };
-    "/contract-users/contract/{contractId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all users for a specific contract */
-        get: operations["ContractUsersController_getContractUsersByContractId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/contract-users/user/{userId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all contracts for a specific user */
-        get: operations["ContractUsersController_getContractUsersByUserId"];
-        put?: never;
-        post?: never;
-        delete?: never;
+        /**
+         * Delete a data source
+         * @description Deletes a data source by its ID
+         */
+        delete: operations["DataSourcesController_deleteDataSource"];
         options?: never;
         head?: never;
         patch?: never;
@@ -448,6 +309,253 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/password-reset/request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_requestPasswordReset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/password-reset/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_confirmPasswordReset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/test-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_testEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/contract-users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all contract user relationships */
+        get: operations["ContractUsersController_getContractUsers"];
+        put?: never;
+        /** Create a new contract user relationship */
+        post: operations["ContractUsersController_createContractUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/contract-users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get contract user relationship by ID */
+        get: operations["ContractUsersController_getContractUserById"];
+        put?: never;
+        post?: never;
+        /** Delete contract user relationship */
+        delete: operations["ContractUsersController_deleteContractUser"];
+        options?: never;
+        head?: never;
+        /** Update contract user relationship */
+        patch: operations["ContractUsersController_updateContractUser"];
+        trace?: never;
+    };
+    "/contract-users/contract/{contractId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all users for a specific contract */
+        get: operations["ContractUsersController_getContractUsersByContractId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/contract-users/user/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all contracts for a specific user */
+        get: operations["ContractUsersController_getContractUsersByUserId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/energy-providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["EnergyProviderController_getEnergyProvidersReq"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharing-versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SharingVersionsController_createVersionBulk"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharing-versions/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SharingVersionsController_getVersionsByCommunityId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharing-versions/{sharingVersionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["SharingVersionsController_deleteSharingVersion"];
+        options?: never;
+        head?: never;
+        patch: operations["SharingVersionsController_updateSharingVersion"];
+        trace?: never;
+    };
+    "/sharing-versions/{sharingVersionId}/set-production": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SharingVersionsController_setSharingVersionProduction"];
+        trace?: never;
+    };
+    "/sharings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SharingsController_createCommunityContract"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharings/{communityContractId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SharingsController_getSharingsById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sharings/{sharingId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SharingsController_updateSharing"];
+        trace?: never;
+    };
     "/contracts": {
         parameters: {
             query?: never;
@@ -478,6 +586,106 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["ContractsController_updateContract"];
+        trace?: never;
+    };
+    "/contracts/{id}/community-contracts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ContractsController_getCommunityContractsByContractId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/community-contracts/community/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommunityContractsController_getCommunityContracts"];
+        put?: never;
+        post: operations["CommunityContractsController_createCommunityContract"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/community-contracts/community/{communityId}/contract/{communityContractId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommunityContractsController_getCommunityContract"];
+        put: operations["CommunityContractsController_updateContract"];
+        post?: never;
+        delete: operations["CommunityContractsController_deleteContract"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/community-contracts/community/{communityId}/contract/{communityContractId}/terms-agreement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommunityContractsController_getTermsAgreementByCommunityContractId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/community-contracts/{communityContractId}/documents/{documentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload a document to a community
+         * @description Uploads a single file and associates it with a specific communityContract and document ID
+         */
+        post: operations["CommunityContractDocumentsController_addDocumentToCommunityContract"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/community-contracts/{communityContractId}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommunityContractDocumentsController_getCommunityContractDocuments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/communities": {
@@ -684,14 +892,106 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/energy-providers": {
+    "/bulk-imports/{communityId}/process": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["EnergyProviderController_getEnergyProvidersReq"];
+        get?: never;
+        put?: never;
+        /**
+         * Process bulk import CSV file
+         * @description Uploads a CSV file and processes it to create users, contracts, and relationships in bulk
+         */
+        post: operations["BulkImportsController_processBulkImport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/bulk-imports/template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download CSV template
+         * @description Downloads a CSV template file with example data for bulk imports
+         */
+        get: operations["BulkImportsController_downloadTemplate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/bulk-imports/template/documented": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BulkImportsController_downloadDocumentedTemplate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/bulk-imports/template/minimal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BulkImportsController_downloadMinimalTemplate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/bulk-imports/template/with-descriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BulkImportsController_downloadTemplateWithDescriptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/bulk-imports/history/{communityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get bulk import history
+         * @description Retrieves the history of bulk imports for a specific community
+         */
+        get: operations["BulkImportsController_getImportHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -704,57 +1004,217 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        CommunityContractDto: {
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            id: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            contractId: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            communityId: string;
-            /** @example 2023-01-01 */
-            communityJoinDate?: Record<string, never> | null;
+        CreateDataSourceDto: {
             /**
-             * @description Community fee amount
-             * @example 50
+             * @description The contract ID this data source belongs to
+             * @example 507f1f77bcf86cd799439011
              */
-            communityFee?: Record<string, never> | null;
-            /** @enum {string|null} */
-            communityFeePeriodType?: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
-            /** @example I agree to the terms and conditions */
-            sharingIds: string[];
+            contractId: string;
+            /**
+             * @description Name of the data source
+             * @example Smart Meter #001
+             */
+            name: string;
+            /**
+             * @description Type of the data source
+             * @example SHELLY_CLOUD
+             * @enum {string}
+             */
+            type: "DATA_DIS" | "SHELLY_CLOUD";
+            /**
+             * @description Description of the data source
+             * @example Main electricity meter for building A
+             */
+            description?: string;
+            /**
+             * @description Configuration object for the data source
+             * @example {
+             *       "endpoint": "https://api.meter.com/data",
+             *       "apiKey": "secret",
+             *       "deviceId": "device123",
+             *       "deviceHost": "shelly-cloud.com"
+             *     }
+             */
+            configuration?: Record<string, never>;
         };
-        CommunityContract: {
+        DataSourceResponseDto: {
+            /**
+             * @description Unique identifier of the data source
+             * @example 507f1f77bcf86cd799439011
+             */
+            id: string;
+            /**
+             * @description The contract ID this data source belongs to
+             * @example 507f1f77bcf86cd799439011
+             */
+            contractId: string;
+            /**
+             * @description Name of the data source
+             * @example Smart Meter #001
+             */
+            name: string;
+            /**
+             * @description Type of the data source
+             * @example smart_meter
+             */
+            type: string;
+            /**
+             * @description Description of the data source
+             * @example Main electricity meter for building A
+             */
+            description?: string;
+            /**
+             * @description Configuration object for the data source
+             * @example {
+             *       "endpoint": "https://api.meter.com/data",
+             *       "deviceId": "device123",
+             *       "deviceHost": "shelly-cloud.com"
+             *     }
+             */
+            configuration?: Record<string, never>;
+            /**
+             * Format: date-time
+             * @description Creation timestamp
+             * @example 2025-07-23T10:30:00Z
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description Last update timestamp
+             * @example 2025-07-23T11:45:00Z
+             */
+            updatedAt: string;
+        };
+        UpdateDataSourceDto: {
+            /**
+             * @description The contract ID this data source belongs to
+             * @example 507f1f77bcf86cd799439011
+             */
+            contractId?: string;
+            /**
+             * @description Name of the data source
+             * @example Smart Meter #001 Updated
+             */
+            name?: string;
+            /**
+             * @description Type of the data source
+             * @example SHELLY_CLOUD
+             * @enum {string}
+             */
+            type?: "DATA_DIS" | "SHELLY_CLOUD";
+            /**
+             * @description Description of the data source
+             * @example Updated description for the meter
+             */
+            description?: string;
+            /**
+             * @description Configuration object for the data source
+             * @example {
+             *       "endpoint": "https://api.meter.com/v2/data",
+             *       "apiKey": "new-secret",
+             *       "deviceId": "device456",
+             *       "deviceHost": "updated-host.com"
+             *     }
+             */
+            configuration?: Record<string, never>;
+            /**
+             * @description Device ID for hardware data sources
+             * @example device123
+             */
+            deviceId?: string;
+            /**
+             * @description Device host for hardware data sources
+             * @example shelly-cloud.com
+             */
+            deviceHost?: string;
+        };
+        Document: {
+            /** @example document.pdf */
+            name: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            id: string;
+            /** @example https://example.com/document.pdf */
+            url: string;
+            /** @example media123 */
+            mediaId: string;
+            /** @example 2025-06-11T10:30:00.000Z */
+            createdAt: string;
+            /**
+             * @example COMMUNITY_DOCUMENT
+             * @enum {string}
+             */
+            documentType: "COMMUNITY_MODEL" | "COMMUNITY_DOCUMENT" | "CONTRACT_DOCUMENT";
+            /** @example This is a detailed description of the document */
+            longDescription?: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174001 */
+            relatedDocumentId?: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174002 */
+            communityId?: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174003 */
+            communityContractId?: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174004 */
+            termsAgreementId?: string;
+        };
+        TermsAgreementDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            id: string;
+            /** @example [
+             *       "550e8400-e29b-41d4-a716-446655440000"
+             *     ] */
+            documents: string[];
+            /** @example 2012-07-14T01:00:00+01:00 */
+            acceptanceDate: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            userId: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            communityContractId: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            userVat: string;
+        };
+        CreateUserDto: {
             /**
              * Format: uuid
              * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
              */
             id: string;
+            /** @example johndoe@email.com */
+            email: string;
+            /** @example 7311413M */
+            vat: string;
+            /** @example 666666666 */
+            mobile: string;
+            /** @example John Doe */
+            name: string;
+            /** @example mySecretPassword33 */
+            password: string;
+        };
+        User: {
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            id: string;
+            /** @example ES12345678A */
+            vat: string;
+            /** @example +34600123456 */
+            mobile?: string | null;
+            /** @example user@example.com */
+            email?: string | null;
+            /** @example John Doe */
+            name?: string | null;
+            /** @example password123 */
+            password?: string | null;
+            /**
+             * @example ACTIVE
+             * @enum {string}
+             */
+            status: "ACTIVE" | "INACTIVE" | "PENDING_TO_CLAIM";
+        };
+        CreatePendingUserDto: {
             /**
              * Format: uuid
              * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
              */
-            contractId: string;
-            /**
-             * Format: uuid
-             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
-             */
-            communityId: string;
-            /** @example 2023-03-23T10:00:00.000Z */
-            communityJoinDate: string | null;
-            /**
-             * @description Community fee amount
-             * @example 100
-             */
-            communityFee: number | null;
-            /**
-             * @example Monthly
-             * @enum {string|null}
-             */
-            communityFeePeriodType: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
-            /** @example Terms and conditions agreement text */
-            termsAgreement: string | null;
-            /** @example Shares of the contract with the community and different versions */
-            sharingIds: unknown[] | null;
+            id: string;
+            /** @example 7311413M */
+            vat: string;
         };
         UserResponse: {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
@@ -773,6 +1233,119 @@ export interface components {
              */
             status: "ACTIVE" | "INACTIVE" | "PENDING_TO_CLAIM";
         };
+        LoginDto: {
+            /** @example johndoe@email.com */
+            email: string;
+            /** @example password */
+            password: string;
+        };
+        CreateContractUserDto: {
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            id: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            contractId: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            userId: string;
+            /**
+             * @example partner
+             * @enum {string}
+             */
+            role: "owner" | "partner" | "viewer";
+            /** @example read,write,share */
+            permissions?: string;
+        };
+        ContractUser: {
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            id: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            contractId: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            userId: string;
+            /**
+             * @example partner
+             * @enum {string}
+             */
+            role: "owner" | "partner" | "viewer";
+            /** @example 2023-10-01T00:00:00.000Z */
+            sharedAt: string;
+            /** @example read,write,share */
+            permissions: string;
+        };
+        Contract: {
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            id: string;
+            /** @example 2023-10-01T00:00:00.000Z */
+            createdAt: string;
+            /** @example Contract Name */
+            name: string;
+            /**
+             * @example SOLAR
+             * @enum {string|null}
+             */
+            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO" | null;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            providerId: string;
+            /** @example ES1234567890123456 */
+            contractCode: string;
+            /**
+             * @example CONSUMPTION
+             * @enum {string}
+             */
+            contractType: "CONSUMPTION" | "GENERATION";
+            /** @example 100 */
+            contractPower: number | null;
+            /**
+             * @example Active
+             * @enum {string}
+             */
+            state: "Active" | "Inactive";
+            /** @example 123 Main St, Anytown, USA */
+            fullAddress: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            userId: string;
+            /** @example [
+             *       "123e4567-e89b-12d3-a456-426614174000"
+             *     ] */
+            communityContracts: string[];
+            /** @example [
+             *       "123e4567-e89b-12d3-a456-426614174000"
+             *     ] */
+            contractsCommunitiesRequests: string[];
+            /** @example [
+             *       "123e4567-e89b-12d3-a456-426614174000"
+             *     ] */
+            dataSources: string[];
+            /** @example 73400963Z */
+            userVat: string;
+        };
+        ContractUserEnriched: {
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            id: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            contractId: string;
+            /** @example 123e4567-e89b-12d3-a456-426614174000 */
+            userId: string;
+            /**
+             * @example partner
+             * @enum {string}
+             */
+            role: "owner" | "partner" | "viewer";
+            /** @example 2023-10-01T00:00:00.000Z */
+            sharedAt: string;
+            /** @example read,write,share */
+            permissions: string;
+            contract: components["schemas"]["Contract"];
+            user: components["schemas"]["UserResponse"];
+        };
+        UpdateContractUserDto: {
+            /**
+             * @example partner
+             * @enum {string}
+             */
+            role?: "owner" | "partner" | "viewer";
+            /** @example read,write,share */
+            permissions?: string;
+        };
         EnergyProvider: {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             id: string;
@@ -782,6 +1355,128 @@ export interface components {
             code: string;
             /** @example B1231231 */
             vat: string;
+        };
+        SharingDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            id: string;
+            /** @example 50 */
+            share: number;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            versionId: string;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            communityContractId: string;
+        };
+        CreateSharingVersionDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            id: string;
+            /** @example V.1.0 */
+            name: string;
+            /** @example true */
+            isProductionVersion: boolean;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            communityId: string;
+            /** @example [
+             *       {
+             *         "communityContractId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
+             *         "share": 0.5,
+             *         "versionId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
+             *         "id": "550e8400-e29b-41d4-a716-446655440000"
+             *       }
+             *     ] */
+            sharings: components["schemas"]["SharingDto"][];
+        };
+        SharingVersion: {
+            /** @example 01956d02-39dd-731b-91e6-c502a7f31e47 */
+            id: string;
+            /** @example v1.0 */
+            name: string;
+            /** @example true */
+            isProductionVersion: boolean;
+            /**
+             * Format: date-time
+             * @example 2023-01-01T00:00:00Z
+             */
+            createdDate: string;
+            /**
+             * Format: date-time
+             * @example 2023-01-02T00:00:00Z
+             */
+            updatedDate: string;
+            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            communityId: string;
+        };
+        UpdateSharingVersionDto: {
+            /** @example [
+             *       {
+             *         "communityContractId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
+             *         "share": 0.5,
+             *         "versionId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
+             *         "id": "550e8400-e29b-41d4-a716-446655440000"
+             *       }
+             *     ] */
+            sharings: components["schemas"]["SharingDto"][];
+        };
+        Sharing: {
+            /** @example 01956d02-39dd-731b-91e6-c502a7f31e47 */
+            id: string;
+            /** @example 50 */
+            share: number;
+            /** @example v1.0 */
+            versionId: string;
+            /** @example cc123456 */
+            communityContractId: string;
+            /**
+             * Format: date-time
+             * @example 2023-01-01T00:00:00Z
+             */
+            createdDate: string;
+            /**
+             * Format: date-time
+             * @example 2023-01-02T00:00:00Z
+             */
+            updatedDate: string;
+        };
+        ContractDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            id: string;
+            /** @example 2023-01-01T00:00:00.000Z */
+            createdAt: string;
+            /** @example Oficina Commenergy */
+            name: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            providerId: string;
+            /** @example ES0021000000000000AA */
+            contractCode: string;
+            /**
+             * @example CONSUMPTION
+             * @enum {string}
+             */
+            contractType: "CONSUMPTION" | "GENERATION";
+            /**
+             * @description Contract power in kW
+             * @example 10
+             */
+            contractPower?: number;
+            /**
+             * @example Active
+             * @enum {string}
+             */
+            state: "Active" | "Inactive";
+            /** @example Carrer de la Marina, 16 */
+            fullAddress: string;
+            /** @example [] */
+            communityContracts: string[];
+            /**
+             * @example SOLAR
+             * @enum {string|null}
+             */
+            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO" | null;
+            /** @example [] */
+            contractsCommunitiesRequests: string[];
+            /** @example [] */
+            dataSources: string[];
+            /** @example 73400963Z */
+            userVat: string;
         };
         ContractEnriched: {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
@@ -834,25 +1529,57 @@ export interface components {
             /** @example 123e4567-e89b-12d3-a456-426614174000 */
             provider: components["schemas"]["EnergyProvider"];
         };
-        SharingVersion: {
-            /** @example 01956d02-39dd-731b-91e6-c502a7f31e47 */
+        CommunityContractDto: {
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
             id: string;
-            /** @example v1.0 */
-            name: string;
-            /** @example true */
-            isProductionVersion: boolean;
-            /**
-             * Format: date-time
-             * @example 2023-01-01T00:00:00Z
-             */
-            createdDate: string;
-            /**
-             * Format: date-time
-             * @example 2023-01-02T00:00:00Z
-             */
-            updatedDate: string;
-            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
+            contractId: string;
+            /** @example 550e8400-e29b-41d4-a716-446655440000 */
             communityId: string;
+            /** @example 2023-01-01 */
+            communityJoinDate?: Record<string, never> | null;
+            /**
+             * @description Community fee amount
+             * @example 50
+             */
+            communityFee?: Record<string, never> | null;
+            /** @enum {string|null} */
+            communityFeePeriodType?: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
+            /** @example I agree to the terms and conditions */
+            sharingIds: string[];
+        };
+        CommunityContract: {
+            /**
+             * Format: uuid
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            id: string;
+            /**
+             * Format: uuid
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            contractId: string;
+            /**
+             * Format: uuid
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            communityId: string;
+            /** @example 2023-03-23T10:00:00.000Z */
+            communityJoinDate: string | null;
+            /**
+             * @description Community fee amount
+             * @example 100
+             */
+            communityFee: number | null;
+            /**
+             * @example Monthly
+             * @enum {string|null}
+             */
+            communityFeePeriodType: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
+            /** @example Terms and conditions agreement text */
+            termsAgreement: string | null;
+            /** @example Shares of the contract with the community and different versions */
+            sharingIds: unknown[] | null;
         };
         SharingEnriched: {
             /** @example 01956d02-39dd-731b-91e6-c502a7f31e47 */
@@ -879,367 +1606,6 @@ export interface components {
              *       "totalUsedPercentage": 0.5
              *     } */
             version: components["schemas"]["SharingVersion"];
-        };
-        CommunityContractEnriched: {
-            /**
-             * Format: uuid
-             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
-             */
-            id: string;
-            /** @example {
-             *       "id": "c6cd7b7a-f7a2-4e38-8e06-27649a84c727",
-             *       "createdAt": "2023-10-01T00:00:00.000Z",
-             *       "name": "Contract Name",
-             *       "provider": "Provider Name",
-             *       "contractCode": "ES1234567890123456",
-             *       "contractType": "CONSUMPTION",
-             *       "contractPower": 100,
-             *       "state": "Active",
-             *       "fullAddress": "123 Main St, Anytown, USA",
-             *       "user": {
-             *         "id": "123e4567-e89b-12d3-a456-426614174000",
-             *         "vat": "ES12345678A",
-             *         "mobile": "+34600123456",
-             *         "email": "user@email.com",
-             *         "name": "John Doe"
-             *       },
-             *       "communityContracts": [],
-             *       "contractsCommunitiesRequests": [],
-             *       "dataSources": []
-             *     } */
-            contract: components["schemas"]["ContractEnriched"];
-            /**
-             * Format: uuid
-             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
-             */
-            communityId: string;
-            /** @example 2023-03-23T10:00:00.000Z */
-            communityJoinDate: string | null;
-            /**
-             * @description Community fee amount
-             * @example 100
-             */
-            communityFee: number | null;
-            /**
-             * @example Monthly
-             * @enum {string|null}
-             */
-            communityFeePeriodType: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
-            /** @example Terms and conditions agreement text */
-            termsAgreement: string | null;
-            /** @example Share ids of the contract with the community and different versions */
-            sharingIds: unknown[] | null;
-            /** @example Shares of the contract with the community and different versions */
-            sharing: components["schemas"]["SharingEnriched"] | null;
-        };
-        TermsAgreementDto: {
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            id: string;
-            /** @example [
-             *       "550e8400-e29b-41d4-a716-446655440000"
-             *     ] */
-            documents: string[];
-            /** @example 2012-07-14T01:00:00+01:00 */
-            acceptanceDate: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            userId: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            communityContractId: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            userVat: string;
-        };
-        Document: {
-            /** @example document.pdf */
-            name: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            id: string;
-            /** @example https://example.com/document.pdf */
-            url: string;
-            /** @example media123 */
-            mediaId: string;
-            /** @example 2025-06-11T10:30:00.000Z */
-            createdAt: string;
-            /**
-             * @example COMMUNITY_DOCUMENT
-             * @enum {string}
-             */
-            documentType: "COMMUNITY_MODEL" | "COMMUNITY_DOCUMENT" | "CONTRACT_DOCUMENT";
-            /** @example This is a detailed description of the document */
-            longDescription?: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174001 */
-            relatedDocumentId?: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174002 */
-            communityId?: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174003 */
-            communityContractId?: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174004 */
-            termsAgreementId?: string;
-        };
-        SharingDto: {
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            id: string;
-            /** @example 50 */
-            share: number;
-            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
-            versionId: string;
-            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
-            communityContractId: string;
-        };
-        CreateSharingVersionDto: {
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            id: string;
-            /** @example V.1.0 */
-            name: string;
-            /** @example true */
-            isProductionVersion: boolean;
-            /** @example 01956d21-fd08-77fa-b18b-fa55eaa97fd3 */
-            communityId: string;
-            /** @example [
-             *       {
-             *         "communityContractId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
-             *         "share": 0.5,
-             *         "versionId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
-             *         "id": "550e8400-e29b-41d4-a716-446655440000"
-             *       }
-             *     ] */
-            sharings: components["schemas"]["SharingDto"][];
-        };
-        UpdateSharingVersionDto: {
-            /** @example [
-             *       {
-             *         "communityContractId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
-             *         "share": 0.5,
-             *         "versionId": "01956d21-fd08-77fa-b18b-fa55eaa97fd3",
-             *         "id": "550e8400-e29b-41d4-a716-446655440000"
-             *       }
-             *     ] */
-            sharings: components["schemas"]["SharingDto"][];
-        };
-        Sharing: {
-            /** @example 01956d02-39dd-731b-91e6-c502a7f31e47 */
-            id: string;
-            /** @example 50 */
-            share: number;
-            /** @example v1.0 */
-            versionId: string;
-            /** @example cc123456 */
-            communityContractId: string;
-            /**
-             * Format: date-time
-             * @example 2023-01-01T00:00:00Z
-             */
-            createdDate: string;
-            /**
-             * Format: date-time
-             * @example 2023-01-02T00:00:00Z
-             */
-            updatedDate: string;
-        };
-        CreateContractUserDto: {
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            id: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            contractId: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            userId: string;
-            /**
-             * @example partner
-             * @enum {string}
-             */
-            role: "owner" | "partner" | "viewer";
-            /** @example read,write,share */
-            permissions?: string;
-        };
-        ContractUser: {
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            id: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            contractId: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            userId: string;
-            /**
-             * @example partner
-             * @enum {string}
-             */
-            role: "owner" | "partner" | "viewer";
-            /** @example 2023-10-01T00:00:00.000Z */
-            sharedAt: string;
-            /** @example read,write,share */
-            permissions: string;
-        };
-        UpdateContractUserDto: {
-            /**
-             * @example partner
-             * @enum {string}
-             */
-            role?: "owner" | "partner" | "viewer";
-            /** @example read,write,share */
-            permissions?: string;
-        };
-        CreateUserDto: {
-            /**
-             * Format: uuid
-             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
-             */
-            id: string;
-            /** @example johndoe@email.com */
-            email: string;
-            /** @example 7311413M */
-            vat: string;
-            /** @example 666666666 */
-            mobile: string;
-            /** @example John Doe */
-            name: string;
-            /** @example mySecretPassword33 */
-            password: string;
-        };
-        User: {
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            id: string;
-            /** @example ES12345678A */
-            vat: string;
-            /** @example +34600123456 */
-            mobile?: string | null;
-            /** @example user@example.com */
-            email?: string | null;
-            /** @example John Doe */
-            name?: string | null;
-            /** @example password123 */
-            password?: string | null;
-            /**
-             * @example ACTIVE
-             * @enum {string}
-             */
-            status: "ACTIVE" | "INACTIVE" | "PENDING_TO_CLAIM";
-        };
-        CreatePendingUserDto: {
-            /**
-             * Format: uuid
-             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
-             */
-            id: string;
-            /** @example 7311413M */
-            vat: string;
-        };
-        LoginDto: {
-            /** @example johndoe@email.com */
-            email: string;
-            /** @example password */
-            password: string;
-        };
-        ContractDto: {
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            id: string;
-            /** @example 2023-01-01T00:00:00.000Z */
-            createdAt: string;
-            /** @example Oficina Commenergy */
-            name: string;
-            /** @example 550e8400-e29b-41d4-a716-446655440000 */
-            providerId: string;
-            /** @example ES0021000000000000AA */
-            contractCode: string;
-            /**
-             * @example CONSUMPTION
-             * @enum {string}
-             */
-            contractType: "CONSUMPTION" | "GENERATION";
-            /**
-             * @description Contract power in kW
-             * @example 10
-             */
-            contractPower?: number;
-            /**
-             * @example Active
-             * @enum {string}
-             */
-            state: "Active" | "Inactive";
-            /** @example Carrer de la Marina, 16 */
-            fullAddress: string;
-            /** @example [] */
-            communityContracts: string[];
-            /**
-             * @example SOLAR
-             * @enum {string|null}
-             */
-            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO" | null;
-            /** @example [] */
-            contractsCommunitiesRequests: string[];
-            /** @example [] */
-            dataSources: string[];
-            /** @example 73400963Z */
-            userVat: string;
-        };
-        Contract: {
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            id: string;
-            /** @example 2023-10-01T00:00:00.000Z */
-            createdAt: string;
-            /** @example Contract Name */
-            name: string;
-            /**
-             * @example SOLAR
-             * @enum {string|null}
-             */
-            energySourceType: "SOLAR" | "WIND" | "HYDRO" | "THERMAL" | "BIO" | null;
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            providerId: string;
-            /** @example ES1234567890123456 */
-            contractCode: string;
-            /**
-             * @example CONSUMPTION
-             * @enum {string}
-             */
-            contractType: "CONSUMPTION" | "GENERATION";
-            /** @example 100 */
-            contractPower: number | null;
-            /**
-             * @example Active
-             * @enum {string}
-             */
-            state: "Active" | "Inactive";
-            /** @example 123 Main St, Anytown, USA */
-            fullAddress: string;
-            /** @example 123e4567-e89b-12d3-a456-426614174000 */
-            userId: string;
-            /** @example [
-             *       "123e4567-e89b-12d3-a456-426614174000"
-             *     ] */
-            communityContracts: string[];
-            /** @example [
-             *       "123e4567-e89b-12d3-a456-426614174000"
-             *     ] */
-            contractsCommunitiesRequests: string[];
-            /** @example [
-             *       "123e4567-e89b-12d3-a456-426614174000"
-             *     ] */
-            dataSources: string[];
-            /** @example 73400963Z */
-            userVat: string;
-        };
-        CreateCommunityDto: {
-            /**
-             * Format: uuid
-             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
-             */
-            id: string;
-            /** @example CEL CommEnergy */
-            name: string;
-            /**
-             * Format: string
-             * @example Calle de la Ciencia, 1, 28040 Madrid
-             */
-            address: Record<string, never>;
-            /** @example Commenergy is a placeholder community description */
-            description: string;
-            /** @example 100 */
-            power: number;
-            /**
-             * @example ACTIVE
-             * @enum {string}
-             */
-            status: "PENDING_TO_BE_CONSTITUTED" | "CONSTITUTED" | "ACTIVE" | "INACTIVE";
-            /** @example ES123123123123123123FF123 */
-            locationCode: string;
         };
         CommunityUser: {
             /**
@@ -1330,6 +1696,91 @@ export interface components {
              *     ]
              */
             communityContracts: string[];
+        };
+        CommunityContractEnriched: {
+            /**
+             * Format: uuid
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            id: string;
+            /** @example {
+             *       "id": "c6cd7b7a-f7a2-4e38-8e06-27649a84c727",
+             *       "createdAt": "2023-10-01T00:00:00.000Z",
+             *       "name": "Contract Name",
+             *       "provider": "Provider Name",
+             *       "contractCode": "ES1234567890123456",
+             *       "contractType": "CONSUMPTION",
+             *       "contractPower": 100,
+             *       "state": "Active",
+             *       "fullAddress": "123 Main St, Anytown, USA",
+             *       "user": {
+             *         "id": "123e4567-e89b-12d3-a456-426614174000",
+             *         "vat": "ES12345678A",
+             *         "mobile": "+34600123456",
+             *         "email": "user@email.com",
+             *         "name": "John Doe"
+             *       },
+             *       "communityContracts": [],
+             *       "contractsCommunitiesRequests": [],
+             *       "dataSources": []
+             *     } */
+            contract: components["schemas"]["ContractEnriched"];
+            /**
+             * Format: uuid
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            communityId: string;
+            /** @example 2023-03-23T10:00:00.000Z */
+            communityJoinDate: string | null;
+            /**
+             * @description Community fee amount
+             * @example 100
+             */
+            communityFee: number | null;
+            /**
+             * @example Monthly
+             * @enum {string|null}
+             */
+            communityFeePeriodType: "Monthly" | "Quarterly" | "Semiannually" | "Yearly" | null;
+            /** @example Terms and conditions agreement text */
+            termsAgreement: string | null;
+            /** @example Share ids of the contract with the community and different versions */
+            sharingIds: unknown[] | null;
+            /** @example Shares of the contract with the community and different versions */
+            sharing: components["schemas"]["SharingEnriched"] | null;
+            /** @example {
+             *       "id": "c6cd7b7a-f7a2-4e38-8e06-27649a84c727",
+             *       "name": "Community Name",
+             *       "description": "Description of the community",
+             *       "createdAt": "2023-01-01T00:00:00.000Z",
+             *       "membersCount": 10
+             *     } */
+            community: components["schemas"]["Community"] | null;
+        };
+        CreateCommunityDto: {
+            /**
+             * Format: uuid
+             * @example c6cd7b7a-f7a2-4e38-8e06-27649a84c727
+             */
+            id: string;
+            /** @example CEL CommEnergy */
+            name: string;
+            /**
+             * Format: string
+             * @example Calle de la Ciencia, 1, 28040 Madrid
+             */
+            address: Record<string, never>;
+            /** @example Commenergy is a placeholder community description */
+            description: string;
+            /** @example 100 */
+            power: number;
+            /**
+             * @example ACTIVE
+             * @enum {string}
+             */
+            status: "PENDING_TO_BE_CONSTITUTED" | "CONSTITUTED" | "ACTIVE" | "INACTIVE";
+            /** @example ES123123123123123123FF123 */
+            locationCode: string;
         };
         CommunityCapacity: {
             /**
@@ -1497,113 +1948,33 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    CommunityContractsController_getCommunityContracts: {
+    DataSourcesController_getDataSourceTypes: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                communityId: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
+            /** @description Data source types retrieved successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CommunityContractEnriched"][];
+                    "application/json": {
+                        /** @example SHELLY_CLOUD */
+                        type?: string;
+                        /** @example Shelly Cloud Integration */
+                        name?: string;
+                        /** @example Connect to Shelly Cloud API to retrieve device data */
+                        description?: string;
+                    }[];
                 };
             };
-        };
-    };
-    CommunityContractsController_createCommunityContract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                communityId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CommunityContractDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CommunityContract"];
-                };
-            };
-        };
-    };
-    CommunityContractsController_getCommunityContract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                communityId: string;
-                communityContractId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CommunityContractEnriched"];
-                };
-            };
-        };
-    };
-    CommunityContractsController_updateContract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                communityId: string;
-                communityContractId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CommunityContractDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CommunityContract"];
-                };
-            };
-        };
-    };
-    CommunityContractsController_deleteContract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                communityId: string;
-                communityContractId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1611,27 +1982,62 @@ export interface operations {
             };
         };
     };
-    CommunityContractsController_getTermsAgreementByCommunityContractId: {
+    DataSourcesController_getAllConfigurations: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                communityContractId: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved the terms agreement for the community contract */
+            /** @description Data source configurations retrieved successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["TermsAgreementDto"];
+                    "application/json": Record<string, never>[];
                 };
             };
-            /** @description Terms agreement not found for the community contract */
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DataSourcesController_getConfigurationByType: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The data source type */
+                type: "DATA_DIS" | "SHELLY_CLOUD";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Data source configuration retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Data source type not found */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1640,135 +2046,37 @@ export interface operations {
             };
         };
     };
-    CommunityContractDocumentsController_addDocumentToCommunityContract: {
+    DataSourcesController_createDataSource: {
         parameters: {
-            query: {
-                relatedDocumentId: string;
-            };
+            query?: never;
             header?: never;
-            path: {
-                communityContractId: string;
-                /** @description Document ID to assign to the uploaded file */
-                documentId: string;
-                /** @description Community ID */
-                id: unknown;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "multipart/form-data": {
-                    /**
-                     * Format: binary
-                     * @description The file to upload
-                     */
-                    file: string;
-                };
+                "application/json": components["schemas"]["CreateDataSourceDto"];
             };
         };
         responses: {
-            /** @description Document successfully uploaded and associated with the community */
+            /** @description Data source created successfully */
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Document"];
+                    "application/json": components["schemas"]["DataSourceResponseDto"];
                 };
             };
-            /** @description No file selected to upload */
-            409: {
+            /** @description Bad request - Invalid input data */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
             };
-            /** @description Error uploading the document */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    CommunityContractDocumentsController_getCommunityContractDocuments: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                communityContractId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"];
-                };
-            };
-        };
-    };
-    SharingVersionsController_createVersionBulk: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateSharingVersionDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SharingVersion"];
-                };
-            };
-        };
-    };
-    SharingVersionsController_getVersionsByCommunityId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                communityId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown[];
-                };
-            };
-        };
-    };
-    SharingVersionsController_deleteSharingVersion: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                sharingVersionId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1776,303 +2084,165 @@ export interface operations {
             };
         };
     };
-    SharingVersionsController_updateSharingVersion: {
+    DataSourcesController_getDataSourcesByContract: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Page number for pagination */
+                page?: number;
+                /** @description Number of items per page */
+                limit?: number;
+            };
             header?: never;
             path: {
-                sharingVersionId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateSharingVersionDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    SharingVersionsController_setSharingVersionProduction: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                sharingVersionId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    SharingsController_createCommunityContract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SharingDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Sharing"];
-                };
-            };
-        };
-    };
-    SharingsController_getSharingsById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                communityContractId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Sharing"];
-                };
-            };
-        };
-    };
-    SharingsController_updateSharing: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                sharingId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SharingDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Sharing"];
-                };
-            };
-        };
-    };
-    ContractUsersController_getContractUsers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description List of contract user relationships retrieved successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContractUser"][];
-                };
-            };
-        };
-    };
-    ContractUsersController_createContractUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateContractUserDto"];
-            };
-        };
-        responses: {
-            /** @description Contract user relationship created successfully */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContractUser"];
-                };
-            };
-            /** @description Contract user relationship already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ContractUsersController_getContractUserById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Contract user relationship ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Contract user relationship retrieved successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContractUser"];
-                };
-            };
-            /** @description Contract user relationship not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ContractUsersController_deleteContractUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Contract user relationship ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Contract user relationship deleted successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Contract user relationship not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ContractUsersController_updateContractUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Contract user relationship ID */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateContractUserDto"];
-            };
-        };
-        responses: {
-            /** @description Contract user relationship updated successfully */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContractUser"];
-                };
-            };
-            /** @description Contract user relationship not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ContractUsersController_getContractUsersByContractId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Contract ID */
+                /** @description The ID of the contract */
                 contractId: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Contract users retrieved successfully */
+            /** @description Data sources retrieved successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ContractUser"][];
+                    "application/json": components["schemas"]["DataSourceResponseDto"][];
                 };
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Contract not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
-    ContractUsersController_getContractUsersByUserId: {
+    DataSourcesController_getDataSourceById: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                /** @description User ID */
-                userId: string;
+                /** @description The ID of the data source */
+                id: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description User contracts retrieved successfully */
+            /** @description Data source retrieved successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ContractUser"][];
+                    "application/json": components["schemas"]["DataSourceResponseDto"];
                 };
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Data source not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DataSourcesController_updateDataSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The ID of the data source to update */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDataSourceDto"];
+            };
+        };
+        responses: {
+            /** @description Data source updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataSourceResponseDto"];
+                };
+            };
+            /** @description Bad request - Invalid input data */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Data source not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DataSourcesController_deleteDataSource: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The ID of the data source to delete */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Data source deleted successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized - Invalid or missing JWT token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Data source not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -2368,6 +2538,440 @@ export interface operations {
             };
         };
     };
+    AuthController_requestPasswordReset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_confirmPasswordReset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_testEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_getContractUsers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of contract user relationships retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"][];
+                };
+            };
+        };
+    };
+    ContractUsersController_createContractUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateContractUserDto"];
+            };
+        };
+        responses: {
+            /** @description Contract user relationship created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"];
+                };
+            };
+            /** @description Contract user relationship already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_getContractUserById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Contract user relationship ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Contract user relationship retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"];
+                };
+            };
+            /** @description Contract user relationship not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_deleteContractUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Contract user relationship ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Contract user relationship deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Contract user relationship not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_updateContractUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Contract user relationship ID */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateContractUserDto"];
+            };
+        };
+        responses: {
+            /** @description Contract user relationship updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"];
+                };
+            };
+            /** @description Contract user relationship not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ContractUsersController_getContractUsersByContractId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Contract ID */
+                contractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Contract users retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUserEnriched"][];
+                };
+            };
+        };
+    };
+    ContractUsersController_getContractUsersByUserId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description User ID */
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User contracts retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractUser"][];
+                };
+            };
+        };
+    };
+    EnergyProviderController_getEnergyProvidersReq: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Energy providers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EnergyProvider"][];
+                };
+            };
+        };
+    };
+    SharingVersionsController_createVersionBulk: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSharingVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SharingVersion"];
+                };
+            };
+        };
+    };
+    SharingVersionsController_getVersionsByCommunityId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown[];
+                };
+            };
+        };
+    };
+    SharingVersionsController_deleteSharingVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sharingVersionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SharingVersionsController_updateSharingVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sharingVersionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSharingVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SharingVersionsController_setSharingVersionProduction: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sharingVersionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SharingsController_createCommunityContract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SharingDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Sharing"];
+                };
+            };
+        };
+    };
+    SharingsController_getSharingsById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Sharing"];
+                };
+            };
+        };
+    };
+    SharingsController_updateSharing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sharingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SharingDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Sharing"];
+                };
+            };
+        };
+    };
     ContractsController_getContracts: {
         parameters: {
             query: {
@@ -2478,6 +3082,244 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ContractEnriched"];
+                };
+            };
+        };
+    };
+    ContractsController_getCommunityContractsByContractId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Community contracts for the specified contract. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"][];
+                };
+            };
+        };
+    };
+    CommunityContractsController_getCommunityContracts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityContractEnriched"][];
+                };
+            };
+        };
+    };
+    CommunityContractsController_createCommunityContract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommunityContractDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityContract"];
+                };
+            };
+        };
+    };
+    CommunityContractsController_getCommunityContract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityId: string;
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityContractEnriched"];
+                };
+            };
+        };
+    };
+    CommunityContractsController_updateContract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityId: string;
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommunityContractDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityContract"];
+                };
+            };
+        };
+    };
+    CommunityContractsController_deleteContract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityId: string;
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunityContractsController_getTermsAgreementByCommunityContractId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved the terms agreement for the community contract */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TermsAgreementDto"];
+                };
+            };
+            /** @description Terms agreement not found for the community contract */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunityContractDocumentsController_addDocumentToCommunityContract: {
+        parameters: {
+            query: {
+                relatedDocumentId: string;
+            };
+            header?: never;
+            path: {
+                communityContractId: string;
+                /** @description Document ID to assign to the uploaded file */
+                documentId: string;
+                /** @description Community ID */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description The file to upload
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Document successfully uploaded and associated with the community */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description No file selected to upload */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error uploading the document */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommunityContractDocumentsController_getCommunityContractDocuments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                communityContractId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"];
                 };
             };
         };
@@ -3003,7 +3845,54 @@ export interface operations {
             };
         };
     };
-    EnergyProviderController_getEnergyProvidersReq: {
+    BulkImportsController_processBulkImport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Community ID where the bulk import will be processed */
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description CSV file containing bulk import data
+                     */
+                    file: string;
+                    /** @description Import options (optional) */
+                    options?: Record<string, never>;
+                };
+            };
+        };
+        responses: {
+            /** @description Bulk import processed successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No file selected to upload or invalid file format */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error processing bulk import */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BulkImportsController_downloadTemplate: {
         parameters: {
             query?: never;
             header?: never;
@@ -3012,14 +3901,88 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Energy providers */
+            /** @description CSV template file downloaded successfully */
+            200: {
+                headers: {
+                    /** @description MIME type of the response */
+                    "Content-Type"?: string;
+                    /** @description File attachment header */
+                    "Content-Disposition"?: string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BulkImportsController_downloadDocumentedTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["EnergyProvider"][];
+                content?: never;
+            };
+        };
+    };
+    BulkImportsController_downloadMinimalTemplate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content?: never;
+            };
+        };
+    };
+    BulkImportsController_downloadTemplateWithDescriptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BulkImportsController_getImportHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Community ID to get import history for */
+                communityId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Import history retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

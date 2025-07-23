@@ -1,0 +1,62 @@
+/* Additional styles for documentation */
+.prose table {
+  @apply border-collapse border border-gray-300;
+}
+
+.prose th {
+  @apply border border-gray-300 bg-gray-50 px-4 py-2 text-left font-semibold;
+}
+
+.prose td {
+  @apply border border-gray-300 px-4 py-2;
+}
+
+.prose details {
+  @apply my-4 border border-gray-200 rounded-lg;
+}
+
+.prose details summary {
+  @apply bg-gray-50 px-4 py-3 cursor-pointer font-medium text-gray-900 hover:bg-gray-100 transition-colors;
+}
+
+.prose details[open] summary {
+  @apply border-b border-gray-200;
+}
+
+.prose details > *:not(summary) {
+  @apply px-4 py-2;
+}
+
+/* Syntax highlighting theme adjustments */
+.hljs {
+  @apply bg-gray-100 !important;
+}
+
+/* Custom styling for warning boxes */
+.prose p:has(strong:contains('Important')) {
+  @apply bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4;
+}
+
+/* Table responsive wrapper */
+.table-responsive {
+  @apply overflow-x-auto shadow-sm rounded-lg border border-gray-200;
+}
+
+.table-responsive table {
+  @apply min-w-full border-0;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .prose {
+    max-width: none !important;
+  }
+
+  .prose table {
+    font-size: 12px;
+  }
+}
