@@ -34,9 +34,10 @@ export function DeleteUserModal({
         <AlertDialogHeader>
           <AlertDialogTitle>Remove User</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to remove "{String(user?.name || 'this user')}
-            " from the community? This action cannot be undone and the user will
-            lose access to community resources.
+            Are you sure you want to remove{' '}
+            {`"${String(user?.name || 'this user')}"`} from the community? This
+            action cannot be undone and the user will lose access to community
+            resources.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -34,7 +34,7 @@ export function DeleteContractModal({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Contract</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete "{contract?.name}"? This action
+            Are you sure you want to delete {`"${contract?.name}"`}? This action
             cannot be undone and will remove all associated data including
             community contracts and user relationships.
           </AlertDialogDescription>

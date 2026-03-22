@@ -56,7 +56,7 @@ export default function Login() {
       'Auth state - isAuthenticated:',
       isAuthenticated,
       'authLoading:',
-      authLoading
+      authLoading,
     );
   }, [isAuthenticated, authLoading]);
 
@@ -97,7 +97,7 @@ export default function Login() {
         </p>
 
         <p className="text-center text-sm text-gray-600">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link
             href="/platform/auth/register"
             className="text-foreground hover:underline">

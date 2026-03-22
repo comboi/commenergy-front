@@ -135,7 +135,7 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
         <div className="flex flex-col gap-4">
           <Label htmlFor="user">User Vat*</Label>
           <small className="text-muted-foreground">
-            If the user VAT didn't exist this will create a new user
+            If the user VAT didn&apos;t exist this will create a new user
           </small>
           <VatInput
             value={formData.userVat}

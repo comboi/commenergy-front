@@ -43,7 +43,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
   const [filename, setFilename] = useState(() => {
     // For TXT format, use generation contract code, otherwise use community name
     const generationContract = data.find(
-      (contract) => contract.contract.contractType === 'GENERATION'
+      (contract) => contract.contract.contractType === 'GENERATION',
     );
     if (generationContract) {
       return generationContract.contract.contractCode;
@@ -59,10 +59,10 @@ export const ExportModal: React.FC<ExportModalProps> = ({
   // Calculate contract summary
   const contractSummary = React.useMemo(() => {
     const generation = data.filter(
-      (contract) => contract.contract.contractType === 'GENERATION'
+      (contract) => contract.contract.contractType === 'GENERATION',
     ).length;
     const consumption = data.filter(
-      (contract) => contract.contract.contractType === 'CONSUMPTION'
+      (contract) => contract.contract.contractType === 'CONSUMPTION',
     ).length;
     return { generation, consumption, total: generation + consumption };
   }, [data]);
@@ -76,7 +76,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     if (format === 'txt') {
       // For TXT format, use generation contract code
       const generationContract = data.find(
-        (contract) => contract.contract.contractType === 'GENERATION'
+        (contract) => contract.contract.contractType === 'GENERATION',
       );
       if (generationContract) {
         setFilename(generationContract.contract.contractCode);
@@ -146,7 +146,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             Export Community Contracts
           </DialogTitle>
           <DialogDescription>
-            Export {data?.length || 0} contracts from "{communityName}"
+            Export {data?.length || 0} contracts from {`"${communityName}"`}
             community. Choose your preferred format and customize the filename.
           </DialogDescription>
         </DialogHeader>

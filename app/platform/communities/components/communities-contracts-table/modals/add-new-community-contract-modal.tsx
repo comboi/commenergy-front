@@ -26,7 +26,7 @@ type FormData = {
   communityJoinDate: string;
   communityFee: number;
   communityFeePeriodType: 'Monthly' | 'Quarterly' | 'Semiannually' | 'Yearly';
-  sharingIds: unknown[];
+  sharingIds: string[];
 };
 
 const AddNewCommunityContractModal = ({
@@ -38,7 +38,7 @@ const AddNewCommunityContractModal = ({
   const [createNewContractModalOpen, setCreateNewContractModalOpen] =
     useState(false);
   const [pendingContractId, setPendingContractId] = useState<string | null>(
-    null
+    null,
   );
   const { data: contracts, refetch: refetchContractOptions } = useContracts({
     ownerType: null,
@@ -60,7 +60,7 @@ const AddNewCommunityContractModal = ({
         communityFee: communityContractToEdit.communityFee ?? 0,
         communityFeePeriodType:
           communityContractToEdit.communityFeePeriodType ?? 'Monthly',
-        sharingIds: communityContractToEdit.sharingIds ?? [],
+        sharingIds: (communityContractToEdit.sharingIds ?? []) as string[],
       }
     : {
         id: v4(),
@@ -121,8 +121,8 @@ const AddNewCommunityContractModal = ({
   const mapOptionsToCommunitySelect = (contracts || []).map((contract) => {
     const isContractAlreadyAdded = Boolean(
       communityContractsOfTheCommunity.find(
-        (comContract) => comContract.contract.id === contract.id
-      )
+        (comContract) => comContract.contract.id === contract.id,
+      ),
     );
 
     return {
