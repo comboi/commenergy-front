@@ -37,8 +37,8 @@ export function DeleteDataSourceModal({
           </DialogTitle>
           <DialogDescription className="space-y-2">
             <p>
-              Are you sure you want to delete the data source "{dataSource.name}
-              "?
+              Are you sure you want to delete the data source{' '}
+              {`"${dataSource.name}"`}?
             </p>
             <p className="text-sm text-muted-foreground">
               This action cannot be undone. All data and configurations

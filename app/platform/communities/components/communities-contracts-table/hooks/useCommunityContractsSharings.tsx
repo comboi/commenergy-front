@@ -4,16 +4,16 @@ import { NewSharingDto } from '@/app/platform/sharings/model/sharing';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { getSharingDifference } from '../utils/get-sharing-difference';
-import { updateSharingVersion } from '@/app/platform/sharings/services/useSharingVersions';
+import { useUpdateSharingVersion } from '@/app/platform/sharings/services/useSharingVersions';
 
 const useCommunityContractsSharings = (
   data: CommunityContract[],
   originalData: CommunityContract[],
-  callback: () => void
+  callback: () => void,
 ) => {
   const [isUpdatingSharings, setIsUpdatingSharings] = useState(false);
 
-  const { mutate: updateSharing } = updateSharingVersion({});
+  const { mutate: updateSharing } = useUpdateSharingVersion({});
 
   const handleUpdateSharings = async () => {
     const sharingsToUpdate: NewSharingDto[] = data

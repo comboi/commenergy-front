@@ -56,12 +56,15 @@ Create a local `.env.local` file:
 cp .env.example .env.local
 ```
 
-Required variables:
+Required variable:
 
-- `NEXT_PUBLIC_API_BASE_URL`: base URL used by the authenticated API client in `lib/api-client.ts`
-- `NEXT_PUBLIC_API_URL`: base URL used by the secondary Axios instance in `lib/api.ts`
+- `NEXT_PUBLIC_API_BASE_URL`: base URL for the API client in `lib/api-client.ts`
 
-In most environments both values should point to the same backend origin unless there is a deliberate reason to split them.
+Legacy fallback (still resolved in code, but prefer the canonical var for new setups):
+
+- `NEXT_PUBLIC_API_URL`
+
+See `docs/api-client-strategy.md` for the full env var strategy.
 
 ### 3. Start the dev server
 
@@ -78,6 +81,12 @@ The app will be available at `http://localhost:3000`.
 - `npm run start` — serve the production build
 - `npm run lint` — run Next.js linting
 - `npm run generate-api-schema` — regenerate `lib/api-schema.d.ts` from the backend OpenAPI document
+
+## API client strategy
+
+Frontend API access is centralized in `lib/api-client.ts` (client) and `lib/api-config.ts` (env resolution).
+
+See `docs/api-client-strategy.md` for the full rationale and migration guidance.
 
 ## API schema workflow
 

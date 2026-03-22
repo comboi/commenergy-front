@@ -34,7 +34,7 @@ export function DeleteDocumentModal({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Document</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete "{document?.name}"? This action
+            Are you sure you want to delete {`"${document?.name}"`}? This action
             cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>

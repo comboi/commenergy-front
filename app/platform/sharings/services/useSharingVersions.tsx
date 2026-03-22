@@ -7,7 +7,7 @@ import {
 } from '../model/sharingVersion';
 
 const fetchSharingVersions = async (
-  communityId: string
+  communityId: string,
 ): Promise<SharingVersion[]> => {
   const { data } = await apiClient.get(`/sharing-versions/${communityId}`);
   return data;
@@ -26,15 +26,15 @@ type Props = {
   callback?: (id: string) => void;
 };
 
-export const updateSharingVersion = ({ callback }: Props) => {
+export const useUpdateSharingVersion = ({ callback }: Props) => {
   return useMutation({
     mutationFn: async (
-      data: UpdateSharingVersionDto & { versionId: string }
+      data: UpdateSharingVersionDto & { versionId: string },
     ) => {
       const { versionId, ...sharingVersion } = data;
       const response = await apiClient.patch(
         `/sharing-versions/${data.versionId}`,
-        sharingVersion
+        sharingVersion,
       );
       return response.data;
     },
@@ -64,7 +64,7 @@ export const useSetProductionSharingVersions = ({
   return useMutation({
     mutationFn: async (id: string) => {
       const response = await apiClient.patch(
-        `/sharing-versions/${id}/set-production`
+        `/sharing-versions/${id}/set-production`,
       );
       return response.data;
     },

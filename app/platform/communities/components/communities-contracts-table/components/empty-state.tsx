@@ -24,7 +24,7 @@ export const EmptyState = ({
           </div>
           <h3 className="text-lg font-semibold mb-2">No contracts yet</h3>
           <p className="text-muted-foreground mb-6 max-w-md">
-            This community doesn't have any contracts yet. Contact your
+            This community doesn&apos;t have any contracts yet. Contact your
             community administrator to add contracts.
           </p>
         </CardContent>

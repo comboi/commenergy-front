@@ -68,10 +68,10 @@ export default function ForgotPassword() {
 
           <h1 className="text-3xl font-bold">Check Your Email</h1>
           <p className="text-gray-600">
-            We've sent a password reset link to <strong>{email}</strong>
+            We&apos;ve sent a password reset link to <strong>{email}</strong>
           </p>
           <p className="text-sm text-gray-500">
-            Didn't receive the email? Check your spam folder or wait a few
+            Didn&apos;t receive the email? Check your spam folder or wait a few
             minutes for it to arrive.
           </p>
 
@@ -101,8 +101,8 @@ export default function ForgotPassword() {
         <div className="text-center">
           <h1 className="text-3xl font-bold">Forgot Password</h1>
           <p className="mt-2 text-gray-600">
-            Enter your email address and we'll send you a link to reset your
-            password.
+            Enter your email address and we&apos;ll send you a link to reset
+            your password.
           </p>
         </div>
 
