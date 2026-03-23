@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "generate-api-schema": "npx openapi-typescript http://localhost:5500/api/open-api.yaml  -o ./lib/api-schema.d.ts"
   },
   "dependencies": {
@@ -66,16 +68,21 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.16",
+    "jsdom": "^29.0.1",
     "openapi-typescript": "^7.6.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.0"
   },
   "description": "Next.js frontend for the Commenergy platform.",
   "license": "UNLICENSED",
