@@ -1,7 +1,7 @@
 import axios, { HttpStatusCode } from 'axios';
-import Cookies from 'js-cookie';
 
 import { getApiBaseUrl } from './api-config';
+import { SESSION_EVENT, clearAuthToken, getAuthToken } from './session';
 
 const apiClient = axios.create({
   baseURL: getApiBaseUrl(),
@@ -11,10 +11,12 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = Cookies.get('auth-token');
+  const token = getAuthToken();
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 
@@ -22,17 +24,13 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === HttpStatusCode.Unauthorized) {
-      // Don't handle 401 errors for login attempts - let the login component handle them
       if (error.config?.url?.includes('/login')) {
         return Promise.reject(error);
       }
 
-      // For other 401 errors (expired tokens, etc.), remove token and redirect
-      Cookies.remove('auth-token');
-      if (typeof window !== 'undefined') {
-        window.location.href = '/platform/auth/login';
-      }
+      clearAuthToken(SESSION_EVENT.expired);
     }
+
     return Promise.reject(error);
   }
 );

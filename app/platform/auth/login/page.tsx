@@ -1,40 +1,43 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { PLATFORM_HOME_ROUTE } from '@/lib/session';
 import { useAuth } from '../contexts/auth-context';
 
 export default function Login() {
+  const router = useRouter();
   const { handleLogin, isAuthenticated, isLoading: authLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.replace(PLATFORM_HOME_ROUTE);
+    }
+  }, [authLoading, isAuthenticated, router]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted, clearing error and setting loading');
     setError('');
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       await handleLogin(email, password);
-    } catch (error: any) {
-      const errorMessage =
-        'Login failed. Please check your credentials and try again.';
-
-      setError(errorMessage);
+    } catch {
+      setError('Login failed. Please check your credentials and try again.');
     } finally {
-      console.log('Setting loading to false');
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
-  // Clear error when user starts typing
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     if (error) setError('');
@@ -44,21 +47,6 @@ export default function Login() {
     setPassword(e.target.value);
     if (error) setError('');
   };
-
-  // Debug: Monitor error state changes
-  useEffect(() => {
-    console.log('Error state changed:', error);
-  }, [error]);
-
-  // Debug: Monitor auth state changes
-  useEffect(() => {
-    console.log(
-      'Auth state - isAuthenticated:',
-      isAuthenticated,
-      'authLoading:',
-      authLoading,
-    );
-  }, [isAuthenticated, authLoading]);
 
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -84,8 +72,8 @@ export default function Login() {
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? 'Signing in...' : 'Login'}
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? 'Signing in...' : 'Login'}
         </Button>
 
         <p className="text-center text-sm text-gray-600">
