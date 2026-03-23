@@ -1,21 +1,24 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
-  const isAuthenticated = request.cookies.get('auth-token');
-  const isAuthPage =
-    request.nextUrl.pathname.endsWith('/login') ||
-    request.nextUrl.pathname.endsWith('/register') ||
-    request.nextUrl.pathname.endsWith('/forgot-password') ||
-    request.nextUrl.pathname.endsWith('/reset-password') ||
-    request.nextUrl.pathname === '/';
+import {
+  AUTH_TOKEN_COOKIE,
+  LOGIN_ROUTE,
+  PLATFORM_HOME_ROUTE,
+  isPublicRoute,
+} from '@/lib/session';
 
-  if (!isAuthenticated && !isAuthPage) {
-    return NextResponse.redirect(new URL('/platform/auth/login', request.url));
+export function middleware(request: NextRequest) {
+  const isAuthenticated = request.cookies.get(AUTH_TOKEN_COOKIE);
+  const pathname = request.nextUrl.pathname;
+  const publicRoute = isPublicRoute(pathname);
+
+  if (!isAuthenticated && !publicRoute) {
+    return NextResponse.redirect(new URL(LOGIN_ROUTE, request.url));
   }
 
-  if (isAuthenticated && isAuthPage) {
-    return NextResponse.redirect(new URL('/platform', request.url));
+  if (isAuthenticated && publicRoute) {
+    return NextResponse.redirect(new URL(PLATFORM_HOME_ROUTE, request.url));
   }
 
   return NextResponse.next();
