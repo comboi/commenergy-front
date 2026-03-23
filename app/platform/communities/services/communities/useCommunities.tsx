@@ -5,6 +5,11 @@ import {
   mapCommunitySchemaToCommunity,
 } from '../../model/community';
 
+export const communityQueryKeys = {
+  all: ['communities'] as const,
+  detail: (id: string) => ['communities', 'detail', id] as const,
+};
+
 const fetchCommunities = async (): Promise<Community[]> => {
   const { data } = await apiClient.get('/communities');
   return data.map(mapCommunitySchemaToCommunity);
@@ -17,18 +22,19 @@ const fetchCommunityById = async (id: string): Promise<Community> => {
 
 export function useCommunities() {
   return useQuery({
-    queryKey: ['communities'],
+    queryKey: communityQueryKeys.all,
     queryFn: fetchCommunities,
-    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    staleTime: 1000 * 60 * 5,
     retry: 2,
   });
 }
 
 export function useCommunityById(id: string) {
   return useQuery({
-    queryKey: ['community', id],
+    queryKey: communityQueryKeys.detail(id),
     queryFn: () => fetchCommunityById(id),
-    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    staleTime: 1000 * 60 * 5,
     retry: 2,
+    enabled: !!id,
   });
 }

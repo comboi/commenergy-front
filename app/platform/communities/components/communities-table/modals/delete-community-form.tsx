@@ -12,12 +12,11 @@ type Props = {
 };
 
 const DeleteCommunityForm = ({ community, onClose }: Props) => {
-  const { mutate } = useDeleteCommunity({ callback: onClose });
+  const { mutate, isPending } = useDeleteCommunity({ callback: onClose });
 
   const handleDeleteClick = (e: React.FormEvent) => {
     e.preventDefault();
     mutate(community.id);
-    onClose();
   };
 
   const contractsCount = community.contracts || 0;
@@ -47,11 +46,11 @@ const DeleteCommunityForm = ({ community, onClose }: Props) => {
         )}
       </div>
       <DialogFooter>
-        <Button variant="outline" onClick={onClose}>
+        <Button variant="outline" onClick={onClose} disabled={isPending}>
           Cancel
         </Button>
-        <Button variant="destructive" onClick={handleDeleteClick}>
-          Delete
+        <Button variant="destructive" onClick={handleDeleteClick} disabled={isPending}>
+          {isPending ? 'Deleting...' : 'Delete'}
         </Button>
       </DialogFooter>
     </div>
