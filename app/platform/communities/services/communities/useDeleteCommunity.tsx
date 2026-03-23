@@ -1,7 +1,8 @@
-import { useMutation } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import apiClient from '@/lib/api-client';
+
+import { communityQueryKeys } from './useCommunities';
 
 const deleteCommunity = async (communityId: string): Promise<void> => {
   await apiClient.delete(`/communities/${communityId}`);
@@ -12,26 +13,19 @@ type Props = {
 };
 
 export function useDeleteCommunity({ callback }: Props) {
-  const { data, error, isSuccess, isError, ...rest } = useMutation({
-    mutationKey: ['Communities'],
-    mutationFn: (communityId: string) => deleteCommunity(communityId),
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, string>({
+    mutationKey: communityQueryKeys.all,
+    mutationFn: deleteCommunity,
+    onSuccess: () => {
+      toast.success('Community deleted successfully');
+      queryClient.invalidateQueries({ queryKey: communityQueryKeys.all });
+      callback?.();
+    },
     onError: (error) => {
-      console.error('Error deleting Community:', error);
+      console.error('Error deleting community:', error);
+      toast.error('Error deleting community');
     },
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success('Community deleted successfully');
-      callback?.();
-    } else if (isError) {
-      toast.error('Error deleting Community');
-    }
-  }, [error, isSuccess, isError]);
-
-  return {
-    data: data ?? [],
-    error,
-    ...rest,
-  };
 }

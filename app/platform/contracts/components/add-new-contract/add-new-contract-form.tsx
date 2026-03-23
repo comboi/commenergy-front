@@ -1,11 +1,10 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
-import { v4 } from 'uuid';
 
-import { Contract, NewContractDto } from '../../model/contract';
+import { Contract } from '../../types/contract';
 
 import Select from '@/components/inputs/Select';
 import VatInput from '@/components/inputs/VatInput';
@@ -14,28 +13,17 @@ import { useCreateContracts } from '../../services/useCreateContract';
 import { useProviders } from '@/app/platform/shared/providers/services/useProviders';
 import { useUpdateContract } from '../../services/useUpdateContract';
 import { useAuth } from '@/app/platform/auth/contexts/auth-context';
+import {
+  createEmptyContractForm,
+  mapContractFormToCreateDto,
+  mapContractToFormValues,
+} from '../../mappers/contract-form';
+import { ContractFormValues } from '../../types/contract-form';
 
 type Props = {
   onClose: (contractId: string) => void;
   contractToEdit?: Contract;
 };
-
-const mapContractToNewContractDto = (contract: Contract): NewContractDto => ({
-  id: contract.id,
-  name: contract.name,
-  providerId: contract.provider.id,
-  communityContracts: contract.communityContracts,
-  contractsCommunitiesRequests: contract.contractsCommunitiesRequests,
-  dataSources: contract.dataSources,
-  contractCode: contract.contractCode,
-  contractType: contract.contractType,
-  createdAt: contract.createdAt,
-  state: contract.state,
-  contractPower: contract.contractPower ?? 0,
-  fullAddress: contract.fullAddress,
-  userVat: contract.userVat,
-  energySourceType: contract.energySourceType,
-});
 
 const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
   const { data: providers } = useProviders();
@@ -44,35 +32,20 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
   const { mutate: createContract } = useCreateContracts({ callback: onClose });
   const { mutate: updateContract } = useUpdateContract({ callback: onClose });
 
-  const initialData = contractToEdit
-    ? mapContractToNewContractDto(contractToEdit)
-    : ({
-        id: v4(),
-        name: '',
-        providerId: '',
-        communityContracts: [],
-        contractsCommunitiesRequests: [],
-        dataSources: [],
-        contractCode: '',
-        contractType: 'CONSUMPTION',
-        createdAt: new Date().toISOString(),
-        state: 'Active',
-        contractPower: 0,
-        fullAddress: '',
-        userVat: user?.vat || '',
-      } as unknown as NewContractDto);
-
-  const [formData, setFormData] = useState<NewContractDto>(initialData);
+  const [formData, setFormData] = useState<ContractFormValues>(
+    contractToEdit
+      ? mapContractToFormValues(contractToEdit)
+      : createEmptyContractForm(user?.vat || '')
+  );
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((current) => ({
+      ...current,
+      [name]: name === 'contractPower' ? value : value,
+    }));
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -84,7 +57,6 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    // Validar código según tipo de contrato
     if (
       formData.contractType === 'CONSUMPTION' &&
       formData.contractCode.length < 22
@@ -110,17 +82,21 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
       return;
     }
 
+    const contractPayload = mapContractFormToCreateDto(formData);
+
     if (!contractToEdit) {
-      createContract(formData);
+      createContract(contractPayload);
     } else {
-      updateContract({ contractId: contractToEdit.id, contractData: formData });
+      updateContract({
+        contractId: contractToEdit.id,
+        contractData: contractPayload,
+      });
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-4 flex flex-col gap-2 py-4">
-        {/* 1. Nombre */}
         <div className="flex flex-col gap-4">
           <Label htmlFor="name">Contract Name*</Label>
           <Input
@@ -131,7 +107,6 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
 
-        {/* 2. User */}
         <div className="flex flex-col gap-4">
           <Label htmlFor="user">User Vat*</Label>
           <small className="text-muted-foreground">
@@ -151,14 +126,13 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
 
-        {/* 3. Proveedor */}
         <div className="flex flex-col gap-4">
           <Label htmlFor="provider">Provider*</Label>
           <Select
             onChange={(value) =>
               setFormData({
                 ...formData,
-                providerId: value as NewContractDto['providerId'],
+                providerId: String(value),
               })
             }
             options={providers?.map((provider) => ({
@@ -169,17 +143,15 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
 
-        {/* 4. Tipo de contrato */}
         <div className="flex flex-col gap-4">
           <Label htmlFor="contractType">Contract Type*</Label>
           <Select
             onChange={(value) => {
               setFormData({
                 ...formData,
-                contractType: value as NewContractDto['contractType'],
-                contractCode: '', // Reset code when type changes
+                contractType: value as ContractFormValues['contractType'],
+                contractCode: '',
               });
-              // Clear code error when type changes
               if (errors.contractCode) {
                 setErrors({
                   ...errors,
@@ -195,7 +167,6 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
 
-        {/* 5. Code */}
         <div className="flex flex-col gap-4">
           <Label htmlFor="contractCode">
             Contract Code*{' '}
@@ -218,14 +189,13 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           )}
         </div>
 
-        {/* 6. Status */}
         <div className="flex flex-col gap-4">
           <Label htmlFor="state">Contract Status*</Label>
           <Select
             onChange={(value) =>
               setFormData({
                 ...formData,
-                state: value as NewContractDto['state'],
+                state: value as ContractFormValues['state'],
               })
             }
             options={[
@@ -236,7 +206,6 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
 
-        {/* 7. Address */}
         <div className="flex flex-col gap-4">
           <Label htmlFor="fullAddress">Full Address</Label>
           <Input
@@ -247,7 +216,6 @@ const AddNewContractForm = ({ contractToEdit, onClose }: Props) => {
           />
         </div>
 
-        {/* 8. Potencia */}
         <div className="flex flex-col gap-4">
           <Label htmlFor="contractedPower">Power (kW)</Label>
           <Input
